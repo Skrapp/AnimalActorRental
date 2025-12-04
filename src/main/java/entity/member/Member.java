@@ -4,6 +4,7 @@ import dao.Rental;
 import entity.IDCreator;
 import entity.member.pricepolicy.PricePolicy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Member {
@@ -20,6 +21,7 @@ public class Member {
         this.id = "M".concat(Integer.toString(IDCreator.getInstance().getNextId()));
         this.name = name;
         this.level = level;
+        this.rentalHistory = new ArrayList<>();
         this.numberOfProductions = numberOfProductions;
     }
 
@@ -57,5 +59,16 @@ public class Member {
 
     public void setNumberOfProductions(int numberOfProductions) {
         this.numberOfProductions = numberOfProductions;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", level=" + level +
+                ", rentalHistory=" + rentalHistory +
+                ", numberOfProductions=" + numberOfProductions +
+                '}';
     }
 }

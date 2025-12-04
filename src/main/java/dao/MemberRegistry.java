@@ -14,9 +14,6 @@ public class MemberRegistry {
     private File memberFile;
     private ObjectMapper mapper = new ObjectMapper();
 
-    public MemberRegistry() {
-    }
-
     public MemberRegistry(String fileName) {
         this.memberFile = new File(fileName);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);

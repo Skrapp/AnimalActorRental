@@ -1,0 +1,9 @@
+[ {
+  "id" : "M1",
+  "name" : "sara",
+  "level" : {
+    "fee" : 0.0
+  },
+  "rentalHistory" : [ ],
+  "numberOfProductions" : 4
+} ]

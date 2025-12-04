@@ -68,6 +68,5 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         MainGUI mainGUI = new MainGUI(primaryStage);
         mainGUI.start();
-        primaryStage.show();
     }
 }

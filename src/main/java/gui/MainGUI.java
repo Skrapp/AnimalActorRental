@@ -15,6 +15,8 @@ public class MainGUI {
     public void start(){
         primaryStage.setWidth(700);
         primaryStage.setHeight(500);
-        primaryStage.setScene(new Scene(AddMember.start(memberService)));
+
+        AddMember.start(primaryStage, memberService);
+        primaryStage.show();
     }
 }

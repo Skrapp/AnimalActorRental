@@ -1,9 +1,10 @@
 [ {
-  "id" : "M1",
-  "name" : "sara",
+  "id" : "20",
+  "name" : "sdg",
   "level" : {
+    "name" : "Regular",
     "fee" : 0.0
   },
   "rentalHistory" : [ ],
-  "numberOfProductions" : 4
+  "numberOfProductions" : 5
 } ]

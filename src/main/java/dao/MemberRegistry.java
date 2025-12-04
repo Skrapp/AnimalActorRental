@@ -22,9 +22,11 @@ public class MemberRegistry {
     public boolean addMember(Member member) throws IOException{
         List<Member> members = null;
         try {
+            //TODO getMember hittar inte!!
             members = getMembers();
         } catch (IOException e) {
             //Om det inte går att hämta för att filen inte finns ska en ny arrayList skapas
+            System.out.println("Ingen fil, skapar array");
             members = new ArrayList<>();
         }
         members.add(member);
@@ -32,8 +34,8 @@ public class MemberRegistry {
         return true;
     }
 
-    public List<Member> getMembers()throws IOException{
-        return new ArrayList<>(Arrays.asList(mapper.readValue(memberFile,Member[].class)));
+    public List<Member> getMembers() throws IOException{
+        return new ArrayList<>(Arrays.asList(mapper.readValue(memberFile, Member[].class)));
     }
 
     public void reloadFile(List<Member> members) throws IOException{

@@ -1,3 +1,7 @@
+import gui.MainGUI;
+import javafx.application.Application;
+import javafx.stage.Stage;
+
 /*Du har fått en provanställning på Wigellkoncernen och som andra uppdrag ska du bygga en
   Java-applikation med grafiskt gränssnitt som modellerar en medlemsklubb med uthyrning av
   utrustning. (t.ex. fordon, verktyg, sportprylar eller liknande)
@@ -55,8 +59,15 @@ Egna påhitt:
   tillräckligt många filmer -> Member ska ha en räknare på antal filmer som de gjort
 * Hur ska funktionen av att man vill ha dubletter fungera?
 */
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
-        System.out.println("Hello");
+        launch();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        MainGUI mainGUI = new MainGUI(primaryStage);
+        mainGUI.start();
+        primaryStage.show();
     }
 }

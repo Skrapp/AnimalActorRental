@@ -3,6 +3,7 @@ package dao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import entity.member.Member;
+import entity.member.pricepolicy.Regular;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +27,7 @@ public class MemberRegistry {
             members = getMembers();
         } catch (IOException e) {
             //Om det inte går att hämta för att filen inte finns ska en ny arrayList skapas
-            System.out.println("Ingen fil, skapar array");
-            members = new ArrayList<>();
+            System.out.println(e);
         }
         members.add(member);
         reloadFile(members);
@@ -35,6 +35,9 @@ public class MemberRegistry {
     }
 
     public List<Member> getMembers() throws IOException{
+        if (!memberFile.exists() || memberFile.length() == 0) {
+            return new ArrayList<>();
+        }
         return new ArrayList<>(Arrays.asList(mapper.readValue(memberFile, Member[].class)));
     }
 

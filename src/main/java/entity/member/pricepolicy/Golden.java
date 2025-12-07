@@ -3,10 +3,8 @@ package entity.member.pricepolicy;
 public class Golden implements PricePolicy{
     private double procentReduction;
     private double fee;
-    private String name;
 
     public Golden() {
-        name = "Golden";
         procentReduction = 0.7;
         fee = 3000;
     }
@@ -19,16 +17,12 @@ public class Golden implements PricePolicy{
         this.procentReduction = procentReduction;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    public double getFee() {
+        return fee;
     }
 
     @Override
@@ -37,7 +31,7 @@ public class Golden implements PricePolicy{
     }
 
     @Override
-    public double getFee() {
+    public double payFee() {
         return 0;
     }
 }

@@ -18,7 +18,7 @@ public class Member {
     }
 
     public Member(String name, PricePolicy level, int numberOfProductions) {
-        this.id = "20";/*"M".concat(Integer.toString(IDCreator.getInstance().getNextId()));*/
+        this.id = "M".concat(Integer.toString(IDCreator.getInstance().getNextId()));
         this.name = name;
         this.level = level;
         this.rentalHistory = new ArrayList<>();
@@ -64,8 +64,6 @@ public class Member {
     public void setNumberOfProductions(int numberOfProductions) {
         this.numberOfProductions = numberOfProductions;
     }
-
-
 
     @Override
     public String toString() {

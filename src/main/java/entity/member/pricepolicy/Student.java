@@ -2,10 +2,8 @@ package entity.member.pricepolicy;
 
 public class Student implements PricePolicy{
     private double priceReduction;
-    private String name;
 
     public Student() {
-        name = "Student";
         priceReduction = 400;
     }
 
@@ -15,14 +13,6 @@ public class Student implements PricePolicy{
 
     public void setPriceReduction(double priceReduction) {
         this.priceReduction = priceReduction;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -38,7 +28,7 @@ public class Student implements PricePolicy{
     }
 
     @Override
-    public double getFee() {
+    public double payFee() {
         return 0;
     }
 }

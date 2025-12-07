@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import service.MemberService;
 
 public class ListMembers {
+
     public static void start(Stage primaryStage, MemberService memberService){
         Label titelLabel = new Label("Medlemmar");
         Button addMemberButton = new Button("Lägg till ny medlem");

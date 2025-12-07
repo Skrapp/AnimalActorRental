@@ -1,17 +1,7 @@
 package entity.member.pricepolicy;
 
 public class Regular implements PricePolicy{
-    private String name;
     public Regular() {
-        name = "Regular";
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -20,7 +10,8 @@ public class Regular implements PricePolicy{
     }
 
     @Override
-    public double getFee() {
+    public double payFee() {
         return 0;
     }
+
 }

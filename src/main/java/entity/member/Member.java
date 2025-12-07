@@ -4,6 +4,7 @@ import dao.Rental;
 import entity.IDCreator;
 import entity.member.pricepolicy.PricePolicy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Member {
     public Member() {
     }
 
-    public Member(String name, PricePolicy level, int numberOfProductions) {
+    public Member(String name, PricePolicy level, int numberOfProductions) throws IOException {
         this.id = "M".concat(Integer.toString(IDCreator.getInstance().getNextId()));
         this.name = name;
         this.level = level;

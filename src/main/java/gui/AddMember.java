@@ -70,6 +70,7 @@ public class AddMember {
                 System.out.println("\"" + levelComboBox.getValue() + "\" är inte en giltig level.");
             } catch (IOException ex){
                 System.out.println("Blev fel i filhantering.");
+                System.out.println(ex);
             }
         });
         toListButton.setOnAction(e-> ListMembers.start(primaryStage, memberService));

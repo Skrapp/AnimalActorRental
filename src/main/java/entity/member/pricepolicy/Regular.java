@@ -14,4 +14,8 @@ public class Regular implements PricePolicy{
         return 0;
     }
 
+    @Override
+    public String toString() {
+        return "Regular";
+    }
 }

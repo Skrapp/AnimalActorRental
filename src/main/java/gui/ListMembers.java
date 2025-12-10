@@ -1,33 +1,187 @@
 package gui;
 
+import entity.member.Member;
+import entity.member.pricepolicy.PricePolicy;
+import exceptions.PricePolicyNotFoundException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import service.MemberService;
 
-public class ListMembers {
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-    public static void start(Stage primaryStage, MemberService memberService){
+public class ListMembers {
+    private final Stage primaryStage;
+    private final MemberService memberService;
+
+    public ListMembers(Stage primaryStage, MemberService memberService) {
+        this.primaryStage = primaryStage;
+        this.memberService = memberService;
+    }
+
+    public void start(){
         Label titelLabel = new Label("Medlemmar");
         Button addMemberButton = new Button("Lägg till ny medlem");
-        TableView memberTable = new TableView<>();
-        memberTable.setEditable(false);
-        TableColumn nameColumn = new TableColumn<>("Namn");
-        TableColumn idColumn = new TableColumn<>("ID");
-        TableColumn levelColumn = new TableColumn<>("Level");
-        TableColumn editButtonColumn= new TableColumn<>();
-        memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, editButtonColumn);
 
-        VBox root = new VBox(titelLabel, addMemberButton, memberTable);
+        //Sökfält
+        TextField searchField = new TextField();
+        Button searchButton = new Button();
+        try{
+            ImageView searchImage = new ImageView(new Image(new FileInputStream("media/search.png")));
+            searchImage.setPreserveRatio(true);
+            searchImage.setFitHeight(15);
+            searchButton.setGraphic(searchImage);
+        } catch (FileNotFoundException e){
+            System.out.println(e);
+            searchButton.setText("Sök");
+        }
+
+        //Tabell
+        TableView<Member> memberTable = new TableView<>();
+        memberTable.setEditable(true);
+        TableColumn<Member, String> nameColumn = new TableColumn<>("Namn");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Member, String> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Member, PricePolicy> levelColumn = new TableColumn<>("Level");
+        levelColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
+        TableColumn<Member, Number> productionsColumn = new TableColumn<>("Produktioner");
+        productionsColumn.setCellValueFactory(new PropertyValueFactory<>("productions"));
+        TableColumn<Member, Node> editButtonColumn= new TableColumn<>();
+        memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, productionsColumn, editButtonColumn);
+
+        //fyll tabell med medlemmar
+        try {
+            ObservableList<Member> members = FXCollections.observableArrayList();
+            members.addAll(memberService.getAllMembers());
+            memberTable.setItems(members);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        idColumn.setSortType(TableColumn.SortType.ASCENDING);
+        sortTable(memberTable, idColumn);
+
+        //Filtrering
+        Button filterButton = new Button();
+        try {
+            ImageView filterImage = new ImageView(new Image(new FileInputStream("media/filter.png")));
+            filterImage.setFitHeight(15);
+            filterImage.setPreserveRatio(true);
+            filterButton.setGraphic(filterImage);
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            filterButton.setText("Filter");
+        }
+        Label filterLabel = new Label("Filtrering");
+        List<String> levels = PricePolicy.getAllLevels();
+        Label productionsLabel = new Label("Antal produktioner");
+        Label betweenLabel = new Label("―");
+        //TODO gör så man endast kan skriva siffror. Om fälten lämnas tomma ska de inte räknas med
+        TextField minProductionsField = new TextField("0");
+        TextField maxProductionsField = new TextField("1000");
+        HBox numberOfProductionsBox = new HBox(10, minProductionsField, betweenLabel, maxProductionsField);
+        Button confirmFilterButton = new Button("Filtrera");
+        VBox levelsCheckBox = new VBox(10);
+        for (String level : levels){
+            CheckBox checkBox = new CheckBox(level);
+            levelsCheckBox.getChildren().add(checkBox);
+            checkBox.setSelected(true);
+        }
+        VBox filterBox = new VBox(10,filterLabel, levelsCheckBox, productionsLabel, numberOfProductionsBox, confirmFilterButton);
+        StackPane overlay = new StackPane(filterBox);
+        overlay.setVisible(false);
+
+        //Sätt allt där det ska vara
+        HBox searchBox = new HBox(5,searchField,searchButton);
+        HBox filterButtonsBox = new HBox(20,filterButton, searchBox);
+        filterButtonsBox.setAlignment(Pos.CENTER_RIGHT);
+        HBox addMemberBox = new HBox(addMemberButton);
+        addMemberBox.setAlignment(Pos.CENTER_RIGHT);
+        VBox body = new VBox(20,titelLabel, filterButtonsBox, memberTable, addMemberBox);
+        HBox root = new HBox(body, overlay);
         root.setPadding(new Insets(40));
         primaryStage.setScene(new Scene(root));
 
         //Funktioner till nodes
-        addMemberButton.setOnAction(e-> AddMember.start(primaryStage, memberService));
+        //Ändra medlemmar genom tabellen
+        //TODO hur får jag tag på cellen som man dubbelklicka på?
+        nameColumn.getOnEditCommit().handle(e -> changeCellEvent(memberTable, memberTable.getEditingCell()));
+        //Sökning och filtrering
+        searchButton.setOnAction(e-> {
+            try {
+                memberTable.setItems(searchAndFilter(
+                        searchField.getText(),getSelectedLevels(levelsCheckBox.getChildren()),
+                            Integer.parseInt(minProductionsField.getText()), Integer.parseInt(maxProductionsField.getText())));
+                sortTable(memberTable, idColumn);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        filterButton.setOnAction(e->overlay.setVisible(true));
+
+        confirmFilterButton.setOnAction(e-> {
+            try {
+                memberTable.setItems(searchAndFilter(
+                        searchField.getText(), getSelectedLevels(levelsCheckBox.getChildren()),
+                            Integer.parseInt(minProductionsField.getText()), Integer.parseInt(maxProductionsField.getText())));
+                sortTable(memberTable, idColumn);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        addMemberButton.setOnAction(e-> new AddMember(primaryStage, memberService).start());
+    }
+
+    private void changeCellEvent(TableView<Member> table, TableColumn.CellEditEvent editedCell){
+        Member selectedMember = table.getSelectionModel().getSelectedItem();
+        selectedMember.setName(editedCell.getNewValue().toString());
+    }
+
+    private List<Class<?extends PricePolicy>> getSelectedLevels(List<Node> nodes) {
+        List<Class<? extends PricePolicy>> pricePolicyClasses = new ArrayList<>();
+        for(Node node : nodes){
+            if(node instanceof CheckBox && ((CheckBox) node).isSelected()){
+                try {
+                    pricePolicyClasses.add(PricePolicy.getFromString(((CheckBox) node).getText()).getClass());
+                } catch (PricePolicyNotFoundException ex) {
+                    System.out.println(ex);
+                    System.out.println(((CheckBox) node).getText() + " är inte en giltig PricePolicy.");
+                }
+            }
+        }
+        System.out.println("PricePolicies att inkludera:");
+        pricePolicyClasses.forEach(System.out::println);
+        System.out.println();
+        return pricePolicyClasses;
+    }
+
+    private void sortTable(TableView<Member> table, TableColumn<Member, String> sortColumn) {
+        table.getSortOrder().add(sortColumn);
+        table.sort();
+    }
+
+    private ObservableList<Member> searchAndFilter(String searchWord, List<Class<? extends PricePolicy>> pricePolicyClasses,
+                                                   int minProductions, int maxProductions)
+            throws IOException {
+        return FXCollections.observableArrayList(
+                memberService.getFilteredMembers(searchWord.trim(), pricePolicyClasses, minProductions, maxProductions)
+        );
     }
 }

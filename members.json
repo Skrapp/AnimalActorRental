@@ -1,27 +1,55 @@
 [ {
   "id" : "M1",
-  "name" : "dsafg",
+  "name" : "Sara",
+  "level" : {
+    "type" : "Regular"
+  },
+  "rentalHistory" : [ ],
+  "productions" : 4
+}, {
+  "id" : "M2",
+  "name" : "Gustaf",
   "level" : {
     "type" : "Golden",
     "procentReduction" : 0.7,
     "fee" : 3000.0
   },
   "rentalHistory" : [ ],
-  "numberOfProductions" : 5
-}, {
-  "id" : "M2",
-  "name" : "fdg",
-  "level" : {
-    "type" : "Regular"
-  },
-  "rentalHistory" : [ ],
-  "numberOfProductions" : 334
+  "productions" : 4
 }, {
   "id" : "M3",
-  "name" : "werg",
+  "name" : "Simon",
+  "level" : {
+    "type" : "Student",
+    "priceReduction" : 400.0
+  },
+  "rentalHistory" : [ ],
+  "productions" : 15
+}, {
+  "id" : "M4",
+  "name" : "Rick",
+  "level" : {
+    "type" : "Golden",
+    "procentReduction" : 0.7,
+    "fee" : 3000.0
+  },
+  "rentalHistory" : [ ],
+  "productions" : 6
+}, {
+  "id" : "M5",
+  "name" : "Linus",
   "level" : {
     "type" : "Regular"
   },
   "rentalHistory" : [ ],
-  "numberOfProductions" : 53
+  "productions" : 5
+}, {
+  "id" : "M6",
+  "name" : "Dunkin",
+  "level" : {
+    "type" : "Student",
+    "priceReduction" : 400.0
+  },
+  "rentalHistory" : [ ],
+  "productions" : 7
 } ]

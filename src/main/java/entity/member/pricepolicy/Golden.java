@@ -34,4 +34,9 @@ public class Golden implements PricePolicy{
     public double payFee() {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Golden";
+    }
 }

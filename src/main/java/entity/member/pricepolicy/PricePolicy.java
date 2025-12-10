@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import exceptions.PricePolicyNotFoundException;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  */
@@ -22,7 +25,6 @@ public interface PricePolicy {
     double applyDiscount(double amount);
     double payFee();
 
-    //TODO ska denna vara i MemberService?
     static PricePolicy getFromString(String name) throws PricePolicyNotFoundException {
         switch(name.toLowerCase()){
             case "golden":{
@@ -38,5 +40,8 @@ public interface PricePolicy {
                 throw new PricePolicyNotFoundException(name + " är inte ett giltigt pricePolicy");
             }
         }
+    }
+    static List<String> getAllLevels(){
+        return Arrays.asList("Golden", "Regular", "Student");
     }
 }

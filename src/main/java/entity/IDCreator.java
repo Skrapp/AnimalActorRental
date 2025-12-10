@@ -14,7 +14,7 @@ public class IDCreator {
             file.createNewFile();
         }
         id = getLatestId();
-        //append = true för att inte skriva över existerande fil
+        //append = true för att fortsätta skriva på existerande fil
         writer = new BufferedWriter(new FileWriter(file,true));
     }
     public static IDCreator getInstance() throws IOException{

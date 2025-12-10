@@ -16,7 +16,7 @@ public class MainGUI {
         primaryStage.setWidth(700);
         primaryStage.setHeight(500);
 
-        AddMember.start(primaryStage, memberService);
+        new ListMembers(primaryStage, memberService).start();
         primaryStage.show();
     }
 }

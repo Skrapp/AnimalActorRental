@@ -21,14 +21,7 @@ public class MemberRegistry {
     }
 
     public boolean addMember(Member member) throws IOException{
-        List<Member> members = null;
-        try {
-            //TODO getMember hittar inte!!
-            members = getMembers();
-        } catch (IOException e) {
-            //Om det inte går att hämta för att filen inte finns ska en ny arrayList skapas
-            System.out.println(e);
-        }
+        List<Member> members = getMembers();
         members.add(member);
         reloadFile(members);
         return true;

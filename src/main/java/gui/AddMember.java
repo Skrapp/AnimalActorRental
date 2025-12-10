@@ -20,9 +20,15 @@ import java.util.function.Predicate;
 
 
 public class AddMember {
+    private final Stage primaryStage;
+    private final MemberService memberService;
 
+    public AddMember(Stage primaryStage, MemberService memberService) {
+        this.primaryStage = primaryStage;
+        this.memberService = memberService;
+    }
 
-    public static void start(Stage primaryStage, MemberService memberService){
+    public void start(){
         //Skapar och placerar nodes
         Label titleLabel = new Label("Lägg till ny medlem");
         Label nameLabel = new Label("Namn");
@@ -31,14 +37,9 @@ public class AddMember {
         TextField productionsField = new TextField();
         Label levelLabel = new Label("Välj level");
         ComboBox<String> levelComboBox = new ComboBox<>();
-        String[] levels = {
-                "Golden",
-                "Regular",
-                "Student",
-                "g"
-        };
-        levelComboBox.setItems(FXCollections.observableArrayList(levels));
+        levelComboBox.setItems(FXCollections.observableArrayList(PricePolicy.getAllLevels()));
         Button addMemberButton = new Button("Lägg till medlem");
+        addMemberButton.setDefaultButton(true);
         Button toListButton = new Button("Se alla medlemmar");
 
         VBox nameBox = new VBox(nameLabel, nameField);
@@ -73,7 +74,7 @@ public class AddMember {
                 System.out.println(ex);
             }
         });
-        toListButton.setOnAction(e-> ListMembers.start(primaryStage, memberService));
+        toListButton.setOnAction(e-> new ListMembers(primaryStage, memberService).start());
 
         //TODO om en level som behöver registering så som betalning eller studentkort ska en varning komma upp, och när
         // knapp trycks ska en popup dyka upp som man behöver hantera innan medlem skapas och läggs till.
@@ -88,8 +89,10 @@ public class AddMember {
      * @param warningMessage
      * @param validator
      */
-    private static void addValidationListener(TextField field, Label warningLabel, String warningMessage, Predicate<String> validator){
-        field.focusedProperty().addListener(((observable, oldValue, newValue) -> {
+    private void addValidationListener(TextField field, Label warningLabel,
+                                              String warningMessage, Predicate<String> validator){
+        field.focusedProperty().addListener(
+                ((observable, oldValue, newValue) -> {
             if(!newValue && !field.getText().isEmpty()){
                 if (validator.test(field.getText())) {
                     warningLabel.setVisible(false);
@@ -101,7 +104,7 @@ public class AddMember {
         }));
     }
 
-    private static void cleanFields(Node... fields){
+    private void cleanFields(Node... fields){
         for (Node field : fields){
             if(field instanceof TextInputControl){
                 ((TextInputControl) field).clear();

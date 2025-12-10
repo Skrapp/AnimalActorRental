@@ -13,17 +13,17 @@ public class Member {
     private String name;
     private PricePolicy level;
     private List<Rental> rentalHistory;
-    private int numberOfProductions;
+    private int productions;
 
     public Member() {
     }
 
-    public Member(String name, PricePolicy level, int numberOfProductions) throws IOException {
+    public Member(String name, PricePolicy level, int productions) throws IOException {
         this.id = "M".concat(Integer.toString(IDCreator.getInstance().getNextId()));
         this.name = name;
         this.level = level;
         this.rentalHistory = new ArrayList<>();
-        this.numberOfProductions = numberOfProductions;
+        this.productions = productions;
     }
 
     public String getId() {
@@ -58,12 +58,12 @@ public class Member {
         this.rentalHistory = rentalHistory;
     }
 
-    public int getNumberOfProductions() {
-        return numberOfProductions;
+    public int getProductions() {
+        return productions;
     }
 
-    public void setNumberOfProductions(int numberOfProductions) {
-        this.numberOfProductions = numberOfProductions;
+    public void setProductions(int productions) {
+        this.productions = productions;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Member {
                 ", name='" + name + '\'' +
                 ", level=" + level +
                 ", rentalHistory=" + rentalHistory +
-                ", numberOfProductions=" + numberOfProductions +
+                ", numberOfProductions=" + productions +
                 '}';
     }
 }

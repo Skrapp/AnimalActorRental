@@ -31,4 +31,9 @@ public class Student implements PricePolicy{
     public double payFee() {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Student";
+    }
 }

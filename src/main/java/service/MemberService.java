@@ -6,9 +6,7 @@ import entity.member.pricepolicy.PricePolicy;
 import exceptions.PricePolicyNotFoundException;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MemberService {
@@ -21,20 +19,48 @@ public class MemberService {
         return true;
     }
 
+    public List<Member> getAllMembers() throws IOException {
+        return memberRegistry.getMembers();
+    }
+
     /**
      * Filtrerar och sorterar medlemmar från fil.
-     * @param memberComparator sortera enligt comparator
-     * @param pricePolicyFilter filtrera enligt pricePolicy
-     * @param searchName filtrerar enligt sökord på namn
+     *
+     * @param searchWord         filtrerar enligt sökord på namn eller id
+     * @param pricePolicyClasses filtrera enligt pricePolicy. För att inkludera alla PricePolicy använd pricePolicy.class
      * @return returnerar set med medlemmar
      * @throws IOException Om fil inte kan läsas kastas exception
      */
-    public Set<Member> getFilteredAndSortedMembers(Comparator<Member> memberComparator, Class<? extends PricePolicy> pricePolicyFilter, String searchName) throws IOException {
-        Set<Member> sortedMemberSet = memberRegistry.getMembers().stream()
-                .filter(m -> pricePolicyFilter.isInstance(m.getLevel()))
-                .filter(m -> m.getName().toLowerCase().contains(searchName.toLowerCase()))
-                .collect(Collectors.toCollection(() -> new TreeSet<>(memberComparator)));
-        return sortedMemberSet;
+    public Set<Member> getFilteredMembers(String searchWord, List<Class<? extends PricePolicy>> pricePolicyClasses,
+                                          int minProductions, int maxProductions)
+            throws IOException {
+        Set<Member> membersSinglePricePolicy;
+        Set<Member> members = new HashSet<>();
+        for(Class<? extends PricePolicy> pricePolicyClass : pricePolicyClasses){
+        membersSinglePricePolicy = memberRegistry.getMembers().stream()
+                .filter(m -> (pricePolicyClass.isInstance(m.getLevel())
+                    && (m.getName().toLowerCase().contains(searchWord.toLowerCase())
+                        || m.getId().toLowerCase().contains(searchWord.toLowerCase()))
+                    && m.getProductions() >= minProductions && m.getProductions() <= maxProductions))
+                .collect(Collectors.toCollection(HashSet::new));
+        members.addAll(membersSinglePricePolicy);
+        }
+        return members;
+    }
+
+    public Set<Member> getFilteredMembers(String searchWord, List<Class<? extends PricePolicy>> pricePolicyClasses)
+            throws IOException {
+        Set<Member> membersSinglePricePolicy;
+        Set<Member> members = new HashSet<>();
+        for(Class<? extends PricePolicy> pricePolicyClass : pricePolicyClasses){
+            membersSinglePricePolicy = memberRegistry.getMembers().stream()
+                    .filter(m -> (pricePolicyClass.isInstance(m.getLevel())
+                            && (m.getName().toLowerCase().contains(searchWord.toLowerCase())
+                            || m.getId().toLowerCase().contains(searchWord.toLowerCase()))))
+                    .collect(Collectors.toCollection(HashSet::new));
+            members.addAll(membersSinglePricePolicy);
+        }
+        return members;
     }
 
     }

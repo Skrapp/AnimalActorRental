@@ -2,6 +2,7 @@ package gui;
 
 import entity.member.Member;
 import entity.member.pricepolicy.PricePolicy;
+import exceptions.MemberNotFoundException;
 import exceptions.PricePolicyNotFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,13 +11,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.converter.NumberStringConverter;
 import service.MemberService;
 
 import java.io.FileInputStream;
@@ -55,20 +59,63 @@ public class ListMembers {
         TableView<Member> memberTable = new TableView<>();
         memberTable.setEditable(true);
         TableColumn<Member, String> nameColumn = new TableColumn<>("Namn");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameColumn.setCellValueFactory(c -> c.getValue().nameProperty());
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameColumn.setOnEditCommit(e -> {
+            try {
+                Member tableMember = e.getTableView().getItems().get(e.getTablePosition().getRow());
+                Member member = memberService.getMemberByID(tableMember.getId());
+                member.setName(e.getNewValue());
+                memberService.updateMember(member);
+                System.out.println(member.getId() + " uppdaterade namnet till " + member.getName() + ".");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (MemberNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         TableColumn<Member, String> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Member, PricePolicy> levelColumn = new TableColumn<>("Level");
-        levelColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
+        idColumn.setCellValueFactory(c -> c.getValue().idProperty());
+        TableColumn<Member, String> levelColumn = new TableColumn<>("Level");
+        levelColumn.setCellValueFactory(c -> c.getValue().levelProperty().asString());
+        levelColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(PricePolicy.getAllLevels())));
+        levelColumn.setOnEditCommit(e -> {
+            try {
+                Member tableMember = e.getTableView().getItems().get(e.getTablePosition().getRow());
+                Member member = memberService.getMemberByID(tableMember.getId());
+                member.setLevel(PricePolicy.getFromString(e.getNewValue()));
+                memberService.updateMember(member);
+                System.out.println(member.getId() + " uppdaterade level till " + member.getLevel() + ".");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (MemberNotFoundException ex) {
+                throw new RuntimeException(ex);
+            } catch (PricePolicyNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         TableColumn<Member, Number> productionsColumn = new TableColumn<>("Produktioner");
-        productionsColumn.setCellValueFactory(new PropertyValueFactory<>("productions"));
+        productionsColumn.setCellValueFactory(c -> c.getValue().productionsProperty());
+        productionsColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+        productionsColumn.setOnEditCommit(e -> {
+            try {
+                Member tableMember = e.getTableView().getItems().get(e.getTablePosition().getRow());
+                Member member = memberService.getMemberByID(tableMember.getId());
+                member.setProductions(e.getNewValue().intValue());
+                memberService.updateMember(member);
+                System.out.println(member.getId() + " uppdaterade produktioner till " + member.getProductions() + ".");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (MemberNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         TableColumn<Member, Node> editButtonColumn= new TableColumn<>();
         memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, productionsColumn, editButtonColumn);
 
         //fyll tabell med medlemmar
         try {
-            ObservableList<Member> members = FXCollections.observableArrayList();
-            members.addAll(memberService.getAllMembers());
+            ObservableList<Member> members = FXCollections.observableArrayList(memberService.getAllMembers());
             memberTable.setItems(members);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -102,7 +149,8 @@ public class ListMembers {
             levelsCheckBox.getChildren().add(checkBox);
             checkBox.setSelected(true);
         }
-        VBox filterBox = new VBox(10,filterLabel, levelsCheckBox, productionsLabel, numberOfProductionsBox, confirmFilterButton);
+        VBox filterBox = new VBox(10,filterLabel, levelsCheckBox, productionsLabel, numberOfProductionsBox,
+                confirmFilterButton);
         StackPane overlay = new StackPane(filterBox);
         overlay.setVisible(false);
 
@@ -120,13 +168,14 @@ public class ListMembers {
         //Funktioner till nodes
         //Ändra medlemmar genom tabellen
         //TODO hur får jag tag på cellen som man dubbelklicka på?
-        nameColumn.getOnEditCommit().handle(e -> changeCellEvent(memberTable, memberTable.getEditingCell()));
+        //nameColumn.getOnEditCommit().handle(e -> changeCellEvent(memberTable, memberTable.getEditingCell()));
         //Sökning och filtrering
         searchButton.setOnAction(e-> {
             try {
                 memberTable.setItems(searchAndFilter(
                         searchField.getText(),getSelectedLevels(levelsCheckBox.getChildren()),
-                            Integer.parseInt(minProductionsField.getText()), Integer.parseInt(maxProductionsField.getText())));
+                        Integer.parseInt(minProductionsField.getText()),
+                        Integer.parseInt(maxProductionsField.getText())));
                 sortTable(memberTable, idColumn);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

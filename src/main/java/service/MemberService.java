@@ -3,6 +3,7 @@ package service;
 import dao.MemberRegistry;
 import entity.member.Member;
 import entity.member.pricepolicy.PricePolicy;
+import exceptions.MemberNotFoundException;
 import exceptions.PricePolicyNotFoundException;
 
 import java.io.IOException;
@@ -17,6 +18,30 @@ public class MemberService {
         Member member = new Member(name, pricePolicy, productions);
         memberRegistry.addMember(member);
         return true;
+    }
+
+    public boolean addMember(Member member) throws IOException {
+        memberRegistry.addMember(member);
+        return true;
+    }
+
+    public void removeMember(Member memberToRemove) throws IOException, MemberNotFoundException {
+        memberRegistry.removeMemberByID(memberToRemove.getId());
+    }
+
+    public void updateMember(Member member) throws IOException, MemberNotFoundException {
+        removeMember(member);
+        addMember(member);
+    }
+
+    public Member getMemberByID(String id) throws IOException, MemberNotFoundException {
+        List<Member> allMembers = getAllMembers();
+        for(Member member : allMembers){
+            if(member.getId().equals(id)){
+                return member;
+            }
+        }
+        throw new MemberNotFoundException("Kunde inte hitta id \"" + id + "\" i medlemsregister.");
     }
 
     public List<Member> getAllMembers() throws IOException {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import entity.member.Member;
 import entity.member.pricepolicy.Regular;
+import exceptions.MemberNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,15 @@ public class MemberRegistry {
     public MemberRegistry(String fileName) {
         this.memberFile = new File(fileName);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    }
+
+    public void removeMemberByID(String id) throws IOException, MemberNotFoundException {
+        List<Member> members = getMembers();
+        //Om det inte finns någon medlem med givet id så kan det inte tas bort, därav är det troligtvis fel någonstans
+        if(!members.removeIf(m -> m.getId().equals(id))){
+            throw new MemberNotFoundException("Medlem med id \"" + id + "\" finns inte i medlemsregister.");
+        }
+        reloadFile(members);
     }
 
     public boolean addMember(Member member) throws IOException{
@@ -36,7 +46,6 @@ public class MemberRegistry {
 
     public void reloadFile(List<Member> members) throws IOException{
         mapper.writeValue(memberFile, members);
-        System.out.println("Sparad");
     }
 
     public File getMemberFile() {

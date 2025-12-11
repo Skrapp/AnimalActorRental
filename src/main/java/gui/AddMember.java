@@ -62,7 +62,8 @@ public class AddMember {
         //TODO grafisk varning
         addMemberButton.setOnAction(e-> {
             try {
-                if(memberService.addMember(nameField.getText(), levelComboBox.getValue(), Integer.parseInt(productionsField.getText()))){
+                if(memberService.addMember(nameField.getText(), levelComboBox.getValue(),
+                        Integer.parseInt(productionsField.getText()))){
                     cleanFields(nameField, productionsField,levelComboBox);
                 }
             } catch (NumberFormatException ex) {

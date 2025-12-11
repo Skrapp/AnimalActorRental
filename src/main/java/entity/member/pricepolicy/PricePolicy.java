@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * För att kunna se vilken klass som används i JSON
  */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -24,6 +24,7 @@ import java.util.List;
 public interface PricePolicy {
     double applyDiscount(double amount);
     double payFee();
+    String toString();
 
     static PricePolicy getFromString(String name) throws PricePolicyNotFoundException {
         switch(name.toLowerCase()){

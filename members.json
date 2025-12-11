@@ -1,18 +1,28 @@
 [ {
-  "id" : "M10",
-  "name" : "Hej",
+  "id" : "M16",
+  "name" : "Sara",
   "level" : {
     "type" : "Student",
     "priceReduction" : 400.0
   },
   "rentalHistory" : [ ],
-  "productions" : 300
+  "productions" : 20
 }, {
-  "id" : "M11",
-  "name" : "Sara",
+  "id" : "M17",
+  "name" : "Linus",
   "level" : {
-    "type" : "Regular"
+    "type" : "Student",
+    "priceReduction" : 400.0
   },
   "rentalHistory" : [ ],
-  "productions" : 69
+  "productions" : 3
+}, {
+  "id" : "M18",
+  "name" : "Gustaf",
+  "level" : {
+    "type" : "Student",
+    "priceReduction" : 400.0
+  },
+  "rentalHistory" : [ ],
+  "productions" : 50
 } ]

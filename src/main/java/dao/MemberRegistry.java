@@ -21,11 +21,13 @@ public class MemberRegistry {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public void removeMemberByID(String id) throws IOException, MemberNotFoundException {
+    public void removeMemberByID(List<String> ids) throws IOException, MemberNotFoundException {
         List<Member> members = getMembers();
         //Om det inte finns någon medlem med givet id så kan det inte tas bort, därav är det troligtvis fel någonstans
-        if(!members.removeIf(m -> m.getId().equals(id))){
-            throw new MemberNotFoundException("Medlem med id \"" + id + "\" finns inte i medlemsregister.");
+        for(String id : ids) {
+            if (!members.removeIf(m -> m.getId().equals(id))) {
+                throw new MemberNotFoundException("Medlem med id \"" + id + "\" finns inte i medlemsregister.");
+            }
         }
         reloadFile(members);
     }

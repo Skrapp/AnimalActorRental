@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListMembers {
     private final Stage primaryStage;
@@ -110,8 +111,19 @@ public class ListMembers {
                 throw new RuntimeException(ex);
             }
         });
-        TableColumn<Member, Node> editButtonColumn= new TableColumn<>();
-        memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, productionsColumn, editButtonColumn);
+        memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, productionsColumn);
+        //Ta bort medlemmar
+        Button removeMembersButton = new Button("Ta bort markerade medlemmar");
+        try{
+            ImageView trashImage = new ImageView(new Image(new FileInputStream("media/trash.png")));
+            trashImage.setPreserveRatio(true);
+            trashImage.setFitHeight(15);
+            removeMembersButton.setGraphic(trashImage);
+            removeMembersButton.setGraphicTextGap(5);
+        } catch (FileNotFoundException e){
+            System.out.println(e);
+        }
+        //TODO En knapp för att markera flera medlemmar
 
         //fyll tabell med medlemmar
         try {
@@ -140,7 +152,9 @@ public class ListMembers {
         Label betweenLabel = new Label("―");
         //TODO gör så man endast kan skriva siffror. Om fälten lämnas tomma ska de inte räknas med
         TextField minProductionsField = new TextField("0");
+        minProductionsField.setPrefWidth(45);
         TextField maxProductionsField = new TextField("1000");
+        maxProductionsField.setPrefWidth(45);
         HBox numberOfProductionsBox = new HBox(10, minProductionsField, betweenLabel, maxProductionsField);
         Button confirmFilterButton = new Button("Filtrera");
         VBox levelsCheckBox = new VBox(10);
@@ -155,20 +169,42 @@ public class ListMembers {
         overlay.setVisible(false);
 
         //Sätt allt där det ska vara
-        HBox searchBox = new HBox(5,searchField,searchButton);
+        HBox searchBox = new HBox(5,searchField, searchButton);
         HBox filterButtonsBox = new HBox(20,filterButton, searchBox);
         filterButtonsBox.setAlignment(Pos.CENTER_RIGHT);
-        HBox addMemberBox = new HBox(addMemberButton);
-        addMemberBox.setAlignment(Pos.CENTER_RIGHT);
-        VBox body = new VBox(20,titelLabel, filterButtonsBox, memberTable, addMemberBox);
+        HBox manageMemberBox = new HBox(20, removeMembersButton, addMemberButton);
+        manageMemberBox.setAlignment(Pos.CENTER_RIGHT);
+        VBox body = new VBox(20,titelLabel, filterButtonsBox, memberTable, manageMemberBox);
         HBox root = new HBox(body, overlay);
         root.setPadding(new Insets(40));
         primaryStage.setScene(new Scene(root));
 
         //Funktioner till nodes
-        //Ändra medlemmar genom tabellen
-        //TODO hur får jag tag på cellen som man dubbelklicka på?
-        //nameColumn.getOnEditCommit().handle(e -> changeCellEvent(memberTable, memberTable.getEditingCell()));
+        //Ta bort medlemmar
+        removeMembersButton.setOnAction(e -> {
+            TableView.TableViewSelectionModel<Member> selectionModel = memberTable.getSelectionModel();
+            if(selectionModel.isEmpty()){
+                System.out.println("Ingen medlem vald.");
+                return;
+            }
+
+            ObservableList<Integer> selectedRows = selectionModel.getSelectedIndices();
+            List<Member> membersToRemove = selectedRows.stream()
+                    .map(row -> memberTable.getItems().get(row))
+                    .collect(Collectors.toList());
+
+            try {
+                memberService.removeMembers(membersToRemove);
+
+                memberTable.setItems(searchAndFilter(searchField.getText(), getSelectedLevels(levelsCheckBox.getChildren()),
+                        Integer.parseInt(minProductionsField.getText()), Integer.parseInt(maxProductionsField.getText())));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (MemberNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        });
         //Sökning och filtrering
         searchButton.setOnAction(e-> {
             try {
@@ -198,11 +234,6 @@ public class ListMembers {
         addMemberButton.setOnAction(e-> new AddMember(primaryStage, memberService).start());
     }
 
-    private void changeCellEvent(TableView<Member> table, TableColumn.CellEditEvent editedCell){
-        Member selectedMember = table.getSelectionModel().getSelectedItem();
-        selectedMember.setName(editedCell.getNewValue().toString());
-    }
-
     private List<Class<?extends PricePolicy>> getSelectedLevels(List<Node> nodes) {
         List<Class<? extends PricePolicy>> pricePolicyClasses = new ArrayList<>();
         for(Node node : nodes){
@@ -227,10 +258,8 @@ public class ListMembers {
     }
 
     private ObservableList<Member> searchAndFilter(String searchWord, List<Class<? extends PricePolicy>> pricePolicyClasses,
-                                                   int minProductions, int maxProductions)
-            throws IOException {
-        return FXCollections.observableArrayList(
-                memberService.getFilteredMembers(searchWord.trim(), pricePolicyClasses, minProductions, maxProductions)
+                                                   int minProductions, int maxProductions) throws IOException {
+        return FXCollections.observableArrayList(memberService.getFilteredMembers(searchWord.trim(), pricePolicyClasses, minProductions, maxProductions)
         );
     }
 }

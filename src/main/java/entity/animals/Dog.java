@@ -13,14 +13,14 @@ public class Dog extends Animal{
         this.race = new SimpleStringProperty();
     }
 
-    public Dog(String name, String color, String description, File imageFile, SimpleStringProperty race) throws IOException {
+    public Dog(String name, String color, String description, File imageFile, String race) throws IOException {
         super(name, color, description, imageFile, Type.DOG);
-        this.race = race;
+        this.race = new SimpleStringProperty(race);
     }
 
-    public Dog(String name, String color, String description, SimpleStringProperty race) throws IOException {
+    public Dog(String name, String color, String description, String race) throws IOException {
         super(name, color, description, Type.DOG);
-        this.race = race;
+        this.race = new SimpleStringProperty(race);
     }
 
     public String getRace() {

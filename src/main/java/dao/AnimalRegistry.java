@@ -27,6 +27,7 @@ public class AnimalRegistry {
     }
 
     private Set<String> getCurrentFileNames() {
+        //TODO om animals mappen är tom ska Set vara tomt, just nu blir det en bugg
         return Stream.of(new File(directory).listFiles())
                 .filter(f -> !f.isDirectory())
                 .map(File::getName)

@@ -1,7 +1,6 @@
 package gui;
 
-import entity.animals.Animal;
-import entity.animals.Bird;
+import entity.animals.*;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.HBox;
 import service.AnimalService;
@@ -34,8 +33,8 @@ public class AddAnimal {
         Label nameLabel = new Label("Namn");
         TextField nameField = new TextField();
         Label descriptionLabel = new Label("beskrivning");
-        TextField descriptionField = new TextField();
-        descriptionField.setPrefHeight(60);
+        TextArea descriptionField = new TextArea();
+        descriptionField.setPrefWidth(220);
         Label colorLabel = new Label("Färg");
         TextField colorField = new TextField();
         Button toListButton = new Button("Se alla djur");
@@ -49,27 +48,29 @@ public class AddAnimal {
         Label flyingLabel = new Label("kan fågeln flyga?");
         CheckBox flyingCheckBox = new CheckBox("Ja");
         Button addBirdButton = new Button("Lägg till fågel");
-        VBox birdBox = new VBox(flyingLabel, flyingCheckBox, addBirdButton);
+        VBox birdBox = new VBox(flyingLabel, flyingCheckBox);
 
         //Katt
         Label exoticLabel = new Label("Är katten exotisk, så som lejon eller vildkatt?");
-        CheckBox excoticCheckBox = new CheckBox("Ja");
+        CheckBox exoticCheckBox = new CheckBox("Ja");
         Button addCatButton = new Button("Lägg till katt");
-        VBox catBox = new VBox(exoticLabel, excoticCheckBox, addCatButton);
+        VBox catBox = new VBox(exoticLabel, exoticCheckBox);
 
         //Hund
         Label raceLabel = new Label("Hundras");
         TextField raceField = new TextField();
         Button addDogButton = new Button("Lägg till hund");
-        VBox dogBox = new VBox(raceLabel, raceField, addDogButton);
+        VBox dogBox = new VBox(raceLabel, raceField);
 
         //Häst
         Label ponyLabel = new Label("Är hästen en ponny?");
         CheckBox ponyCheckBox = new CheckBox("Ja");
         Button addHorseButton = new Button("Lägg till häst");
-        VBox horseBox = new VBox(ponyLabel, ponyCheckBox, addHorseButton);
+        VBox horseBox = new VBox(ponyLabel, ponyCheckBox);
 
-        VBox formBox = new VBox(10, typeBox, nameBox, ColorBox, descriptionBox,birdBox, toListButton);
+        VBox animalTypeBox = new VBox(10);
+
+        VBox formBox = new VBox(10, typeBox, nameBox, ColorBox, descriptionBox, animalTypeBox, toListButton);
         addHorseButton.setAlignment(Pos.CENTER_RIGHT);
         addDogButton.setAlignment(Pos.CENTER_RIGHT);
         addCatButton.setAlignment(Pos.CENTER_RIGHT);
@@ -86,20 +87,69 @@ public class AddAnimal {
 
         //Funktioner till nodes
         //TODO grafisk varning
-        //TODO funkar inte för att man inicierar Bird, då går den inte genom Animal JSONTypeInfo. Kan vara enklast att
-        // arbeta med Map och koppla samman klassen som ärver Animal till en fil.
         addBirdButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Bird(nameField.getText(), colorField.getText(), descriptionField.getText(),
                         flyingCheckBox.isSelected()));
-                cleanFields(nameField, colorField);
+                cleanFields(nameField, colorField, descriptionField, flyingCheckBox);
             } catch (NumberFormatException ex) {
                 System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
-            } /*catch (IOException ex){
+            } catch (IOException ex){
                 System.out.println("Blev fel i filhantering.");
                 System.out.println(ex);
-            }*/ catch (IOException ex) {
-                throw new RuntimeException(ex);
+            }
+        });
+
+        addCatButton.setOnAction(e-> {
+            try {
+                animalService.addAnimal(new Cat(nameField.getText(), colorField.getText(), descriptionField.getText(),
+                        exoticCheckBox.isSelected()));
+                cleanFields(nameField, colorField, descriptionField, exoticCheckBox);
+            } catch (NumberFormatException ex) {
+                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
+            } catch (IOException ex){
+                System.out.println("Blev fel i filhantering.");
+                System.out.println(ex);
+            }
+        });
+
+        addDogButton.setOnAction(e-> {
+            try {
+                animalService.addAnimal(new Dog(nameField.getText(), colorField.getText(), descriptionField.getText(),
+                        raceField.getText()));
+                cleanFields(nameField, colorField, descriptionField, raceField);
+            } catch (NumberFormatException ex) {
+                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
+            } catch (IOException ex){
+                System.out.println("Blev fel i filhantering.");
+                System.out.println(ex);
+            }
+        });
+
+        addHorseButton.setOnAction(e-> {
+            try {
+                animalService.addAnimal(new Horse(nameField.getText(), colorField.getText(), descriptionField.getText(),
+                        ponyCheckBox.isSelected()));
+                cleanFields(nameField, colorField, descriptionField, raceField);
+            } catch (NumberFormatException ex) {
+                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
+            } catch (IOException ex){
+                System.out.println("Blev fel i filhantering.");
+                System.out.println(ex);
+            }
+        });
+
+        typeComboBox.setOnAction(e -> {
+            switch (typeComboBox.getValue().toLowerCase()){
+                case "fågel" : animalTypeBox.getChildren().setAll(birdBox, addBirdButton);
+                break;
+                case "katt" : animalTypeBox.getChildren().setAll(catBox, addCatButton);
+                break;
+                case "hund" : animalTypeBox.getChildren().setAll(dogBox, addDogButton);
+                break;
+                case "häst" : animalTypeBox.getChildren().setAll(horseBox, addHorseButton);
+                break;
+                default: animalTypeBox.getChildren().clear();
             }
         });
 
@@ -139,6 +189,8 @@ public class AddAnimal {
                 ((TextInputControl) field).clear();
             } else if (field instanceof ComboBox) {
                 ((ComboBox<?>)field).setValue(null);
+            } else if (field instanceof CheckBox) {
+                ((CheckBox)field).setSelected(false);
             }
         }
     }

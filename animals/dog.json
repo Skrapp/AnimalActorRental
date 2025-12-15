@@ -1,0 +1,17 @@
+[ {
+  "id" : "A52",
+  "name" : "Fido",
+  "color" : "Gul",
+  "description" : "A very good boy!",
+  "imageFile" : null,
+  "type" : "DOG",
+  "race" : "Schäfer"
+}, {
+  "id" : "A53",
+  "name" : "Lassie",
+  "color" : "Vid och brun",
+  "description" : "Känd för många filmer",
+  "imageFile" : null,
+  "type" : "DOG",
+  "race" : "Kollie"
+} ]

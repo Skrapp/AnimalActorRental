@@ -1,8 +1,8 @@
 package gui;
 
 
+import entity.animals.Animal;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -11,55 +11,47 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class AnimalListing {
-    private String ImageFileName;
-    private String name;
-    private String type;
-    private boolean available;
-    private String description;
-    private String classSpecificAttribute;
+    Animal animal;
 
-    public AnimalListing(String imageFileName, String name, String type, boolean available, String description, String classSpecificAttribute) {
-        ImageFileName = imageFileName;
-        this.name = name;
-        this.type = type;
-        this.available = available;
-        this.description = description;
-        this.classSpecificAttribute = classSpecificAttribute;
-    }
-
-    public AnimalListing(String name, String type, boolean available, String description, String classSpecificAttribute) {
-        this.name = name;
-        this.type = type;
-        this.available = available;
-        this.description = description;
-        this.classSpecificAttribute = classSpecificAttribute;
+    public AnimalListing(Animal animal) {
+        this.animal = animal;
     }
 
     public HBox getListing(){
         HBox listingBox = new HBox(20);
         listingBox.setMinWidth(200);
+        VBox imageBox = new VBox();
         ImageView image = null;
-        try {
-            image = new ImageView(new Image(new FileInputStream("media/search.png")));
-            image.setPreserveRatio(true);
-            image.setFitHeight(250);
-        } catch (FileNotFoundException e) {
-            System.out.println("Filen hittades inte");
-            throw new RuntimeException(e);
+
+        if(animal.getImageFileLocation() != null) {
+            try {
+                image = new ImageView(new Image(new FileInputStream(animal.getImageFileLocation())));
+                image.setFitWidth(250);
+                image.setFitHeight(250);
+                image.setPreserveRatio(true);
+                imageBox.getChildren().add(image);
+            } catch (FileNotFoundException e) {
+                System.out.println("Filen hittades inte");
+                imageBox.getChildren().add(new Label("Bild hittades inte"));
+            }
+        }else {
+            imageBox.getChildren().add(new Label("Ingen bild"));
         }
-        Label nameLabel = new Label(name);
-        Label typeLabel = new Label(type.toUpperCase());
-        Label availableLabel = new Label((available ? "Tillgänglig" : "Otillgänglig"));
-        Text descriptionText = new Text(description + "\n" + classSpecificAttribute);
+
+        Label nameLabel = new Label(animal.getName());
+        Label typeLabel = new Label(animal.getType().getSwedish().toUpperCase());
+        Label availableLabel = new Label((animal.isAvailable() ? "Tillgänglig" : "Otillgänglig"));
+        Text descriptionText = new Text(animal.getDescription() + "\n" + animal.specificAttributes());
         descriptionText.setWrappingWidth(listingBox.getMinWidth());
-        Button rentButton = new Button("Hyr " + name);
+        Button rentButton = new Button("Hyr " + animal.getName());
 
         VBox descriptionBox =  new VBox(10, typeLabel, availableLabel, nameLabel, descriptionText, rentButton);
-        listingBox.getChildren().addAll(image, descriptionBox);
+        listingBox.getChildren().addAll(imageBox, descriptionBox);
         listingBox.setPadding(new Insets(20));
         listingBox.setBorder(new Border(
                 new BorderStroke(

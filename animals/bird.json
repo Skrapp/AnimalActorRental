@@ -16,4 +16,13 @@
   "type" : "BIRD",
   "available" : true,
   "flying" : true
+}, {
+  "id" : "A68",
+  "name" : "Fredde",
+  "color" : "Grön, blå, gul",
+  "description" : "En fågel som vet med hyss. Men med kakor funkar allt.",
+  "imageFileLocation" : "media\\animals\\colorful-parrot-bird.jpg",
+  "type" : "BIRD",
+  "available" : true,
+  "flying" : true
 } ]

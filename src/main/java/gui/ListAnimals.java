@@ -30,8 +30,7 @@ public class ListAnimals {
             for(Animal animal : animalService.getAllAnimals()){
                 System.out.println(animal);
 
-                AnimalListing animalListing = new AnimalListing(animal.getName(), animal.getType().getSwedish(),
-                        true, animal.getDescription(), animal.specificAttributes());
+                AnimalListing animalListing = new AnimalListing(animal);
                 listingBox.getChildren().add(animalListing.getListing());
             }
         } catch (IOException e) {

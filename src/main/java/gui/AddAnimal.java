@@ -21,6 +21,8 @@ import service.RentalService;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
@@ -53,14 +55,14 @@ public class AddAnimal {
         //Lägg till bild
         Button addImageButton = new Button("Lägg till bild");
         Label choosenImageLabel = new Label("Ingen bild vald");
-        AtomicReference<String> imageFileName = new AtomicReference<>("");
+        AtomicReference<String> imageFileLocation = new AtomicReference<>("");
         FileChooser fileChooser = new FileChooser();
 
         addImageButton.setOnAction(e -> {
                     File file = fileChooser.showOpenDialog(primaryStage);
                     if (file != null) {
-                        imageFileName.set(file.getAbsolutePath());
-                        choosenImageLabel.setText(imageFileName.get());
+                        imageFileLocation.set(file.getAbsolutePath());
+                        choosenImageLabel.setText(imageFileLocation.get());
                     }
         });
 
@@ -112,6 +114,7 @@ public class AddAnimal {
         addBirdButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Bird(nameField.getText(), colorField.getText(), descriptionField.getText(),
+                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         flyingCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, flyingCheckBox);
             } catch (NumberFormatException ex) {
@@ -217,5 +220,18 @@ public class AddAnimal {
                 ((CheckBox)field).setSelected(false);
             }
         }
+    }
+
+    //TODO flytta till annan klass
+    private String saveFileToDirectory(String absoluteFileLocation, String targetDirectory) throws IOException {
+        File absoluteFile = new File(absoluteFileLocation);
+        File directory = new File(targetDirectory);
+        if (!directory.isDirectory()){
+            System.out.println("fel");
+            throw new FileAlreadyExistsException(targetDirectory + " är inte en mapp");
+        }
+        File newFile = new File(targetDirectory + File.separator + absoluteFile.getName());
+        Files.copy(absoluteFile.toPath(), newFile.toPath());
+        return newFile.getPath();
     }
 }

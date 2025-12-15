@@ -14,8 +14,8 @@ public class Cat extends Animal{
         return exotic ? "Är ett tämjt vilddjur." : "Är en domesticerad katt.";
     }
 
-    public Cat(String name, String color, String description, File imageFile, boolean exotic) throws IOException {
-        super(name, color, description, imageFile, Type.CAT);
+    public Cat(String name, String color, String description, String imageFileLocation, boolean exotic) throws IOException {
+        super(name, color, description, imageFileLocation, Type.CAT);
         this.exotic = exotic;
     }
 

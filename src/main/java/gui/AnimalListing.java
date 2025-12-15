@@ -24,24 +24,30 @@ public class AnimalListing {
 
     public HBox getListing(){
         HBox listingBox = new HBox(20);
-        listingBox.setMinWidth(200);
-        VBox imageBox = new VBox();
+        listingBox.setMinWidth(250);
         ImageView image = null;
 
-        if(animal.getImageFileLocation() != null) {
+
+        //Sätter en bild, om bild inte finns i mappen eller det inte är någon bild kopplad till Animal används en placeholder
+        try {
+            image = new ImageView(new Image(new FileInputStream(animal.getImageFileLocation())));
+            image.setFitWidth(200);
+            image.setFitHeight(200);
+            image.setPreserveRatio(true);
+            listingBox.getChildren().add(image);
+        } catch (FileNotFoundException | NullPointerException e) {
+            System.out.println("Bild hittas inte");
             try {
-                image = new ImageView(new Image(new FileInputStream(animal.getImageFileLocation())));
-                image.setFitWidth(250);
-                image.setFitHeight(250);
+                image = new ImageView(new Image(new FileInputStream("media" + File.separator + "image not found.jpg")));
+                image.setFitWidth(200);
+                image.setFitHeight(200);
                 image.setPreserveRatio(true);
-                imageBox.getChildren().add(image);
-            } catch (FileNotFoundException e) {
-                System.out.println("Filen hittades inte");
-                imageBox.getChildren().add(new Label("Bild hittades inte"));
+                listingBox.getChildren().add(image);
+            } catch (FileNotFoundException ex) {
+                listingBox.getChildren().add(new Label("Bild hittades inte"));
             }
-        }else {
-            imageBox.getChildren().add(new Label("Ingen bild"));
         }
+
 
         Label nameLabel = new Label(animal.getName());
         Label typeLabel = new Label(animal.getType().getSwedish().toUpperCase());
@@ -49,12 +55,13 @@ public class AnimalListing {
         Text descriptionText = new Text(animal.getDescription() + "\n" + animal.specificAttributes());
         descriptionText.setWrappingWidth(listingBox.getMinWidth());
         Button rentButton = new Button("Hyr " + animal.getName());
+        Button editButton = new Button("Redigera");
 
-        VBox descriptionBox =  new VBox(10, typeLabel, availableLabel, nameLabel, descriptionText, rentButton);
-        listingBox.getChildren().addAll(imageBox, descriptionBox);
+        HBox buttonBox = new HBox(20, rentButton, editButton);
+        VBox descriptionBox =  new VBox(10, typeLabel, availableLabel, nameLabel, descriptionText, buttonBox);
+        listingBox.getChildren().addAll(descriptionBox);
         listingBox.setPadding(new Insets(20));
-        listingBox.setBorder(new Border(
-                new BorderStroke(
+        listingBox.setBorder(new Border(new BorderStroke(
                         Color.GRAY,
                         BorderStrokeStyle.SOLID,
                         new CornerRadii(10),

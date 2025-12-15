@@ -38,6 +38,7 @@ public class ListAnimals {
         }
 
         VBox root = new VBox(scrollPane);
+        root.maxWidth(primaryStage.getWidth());
         primaryStage.setScene(new Scene(root));
     }
 }

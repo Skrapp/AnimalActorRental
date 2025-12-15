@@ -84,6 +84,13 @@ public class MemberService {
         return members;
     }
 
+    /**
+     * TODO Fixa så att ifall minProduction eller maxProduction är tomma ska det inte räknas
+     * @param searchWord
+     * @param pricePolicyClasses
+     * @return
+     * @throws IOException
+     */
     public Set<Member> getFilteredMembers(String searchWord, List<Class<? extends PricePolicy>> pricePolicyClasses)
             throws IOException {
         Set<Member> membersSinglePricePolicy;

@@ -147,7 +147,13 @@ public class ListMembers {
             filterButton.setText("Filter");
         }
         Label filterLabel = new Label("Filtrering");
+        VBox levelsCheckBox = new VBox(10);
         List<String> levels = PricePolicy.getAllLevels();
+        for (String level : levels){
+            CheckBox checkBox = new CheckBox(level);
+            levelsCheckBox.getChildren().add(checkBox);
+            checkBox.setSelected(true);
+        }
         Label productionsLabel = new Label("Antal produktioner");
         Label betweenLabel = new Label("―");
         //TODO gör så man endast kan skriva siffror. Om fälten lämnas tomma ska de inte räknas med
@@ -157,12 +163,7 @@ public class ListMembers {
         maxProductionsField.setPrefWidth(45);
         HBox numberOfProductionsBox = new HBox(10, minProductionsField, betweenLabel, maxProductionsField);
         Button confirmFilterButton = new Button("Filtrera");
-        VBox levelsCheckBox = new VBox(10);
-        for (String level : levels){
-            CheckBox checkBox = new CheckBox(level);
-            levelsCheckBox.getChildren().add(checkBox);
-            checkBox.setSelected(true);
-        }
+
         VBox filterBox = new VBox(10,filterLabel, levelsCheckBox, productionsLabel, numberOfProductionsBox,
                 confirmFilterButton);
         StackPane overlay = new StackPane(filterBox);

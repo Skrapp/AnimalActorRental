@@ -1,0 +1,25 @@
+[ {
+  "id" : "A48",
+  "name" : "dfh",
+  "color" : "fgh",
+  "description" : "fgh",
+  "imageFile" : null,
+  "type" : "BIRD",
+  "flying" : false
+}, {
+  "id" : "A50",
+  "name" : "adfg",
+  "color" : "dafg",
+  "description" : "dafg",
+  "imageFile" : null,
+  "type" : "BIRD",
+  "flying" : false
+}, {
+  "id" : "A51",
+  "name" : "ftgh",
+  "color" : "fsh",
+  "description" : "dafg",
+  "imageFile" : null,
+  "type" : "BIRD",
+  "flying" : false
+} ]

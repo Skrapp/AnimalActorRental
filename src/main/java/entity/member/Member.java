@@ -29,7 +29,7 @@ public class Member {
     }
 
     public Member(String name, PricePolicy level, int productions) throws IOException {
-        this.id = new SimpleStringProperty("M".concat(Integer.toString(IDCreator.getInstance().getNextId())));
+        this.id = new SimpleStringProperty("M".concat(String.valueOf(IDCreator.getInstance().getNextId())));
         this.name = new SimpleStringProperty(name);
         this.level = new SimpleObjectProperty<>(level);
         this.rentalHistory = new ArrayList<>();

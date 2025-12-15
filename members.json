@@ -25,4 +25,14 @@
   },
   "rentalHistory" : [ ],
   "productions" : 50
+}, {
+  "id" : "M40",
+  "name" : "zxfg",
+  "level" : {
+    "type" : "Golden",
+    "procentReduction" : 0.7,
+    "fee" : 3000.0
+  },
+  "rentalHistory" : [ ],
+  "productions" : 6
 } ]

@@ -57,7 +57,7 @@ public class AnimalRegistry {
     public List<Animal> getAllAnimals() throws IOException {
         List <Animal> animals = new ArrayList<>();
         for(String fileName : fileNames){
-            animals.addAll(getAnimals(new File(fileName)));
+            animals.addAll(getAnimals(new File(directory.concat("\\").concat(fileName))));
         }
         return animals;
     }

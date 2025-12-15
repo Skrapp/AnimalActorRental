@@ -10,6 +10,11 @@ public class Bird extends Animal{
         super(Type.BIRD);
     }
 
+    @Override
+    public String specificAttributes() {
+        return flying ? "Kan flyga." : "Kan inte flyga.";
+    }
+
     public Bird(String name, String color, String description, File imageFile, boolean flying) throws IOException {
         super(name, color, description, imageFile, Type.BIRD);
         this.flying = flying;

@@ -10,6 +10,11 @@ public class Horse extends Animal{
         super(Type.HORSE);
     }
 
+    @Override
+    public String specificAttributes() {
+        return pony ? "Är av ponnymodell." : "";
+    }
+
     public Horse(String name, String color, String description, File imageFile, boolean pony) throws IOException {
         super(name, color, description, imageFile, Type.HORSE);
         this.pony = pony;

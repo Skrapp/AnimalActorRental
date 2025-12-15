@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,8 +30,9 @@ public abstract class Animal {
     private SimpleStringProperty name;
     private SimpleStringProperty color;
     private SimpleStringProperty description;
-    private File imageFile;
+    private String imageFileLocation;
     private Type type;
+    private boolean available = true;
 
     public Animal() {
         this.id = new SimpleStringProperty();
@@ -42,19 +42,16 @@ public abstract class Animal {
     }
 
     public Animal(Type type) {
+        this();
         this.type = type;
-        this.id = new SimpleStringProperty();
-        this.name = new SimpleStringProperty();
-        this.color = new SimpleStringProperty();
-        this.description = new SimpleStringProperty();
     }
 
-    public Animal(String name, String color, String description, File imageFile, Type type) throws IOException {
+    public Animal(String name, String color, String description, String imageFileLocation, Type type) throws IOException {
         this.id = new SimpleStringProperty("A".concat(String.valueOf(IDCreator.getInstance().getNextId())));
         this.name = new SimpleStringProperty(name);
         this.color = new SimpleStringProperty(color);
         this.description = new SimpleStringProperty(description);
-        this.imageFile = imageFile;
+        this.imageFileLocation = imageFileLocation;
         this.type = type;
     }
 
@@ -69,6 +66,8 @@ public abstract class Animal {
     public static List<String> getAllAnimalTypes(){
         return Arrays.asList("Fågel", "Katt", "Hund", "Häst");
     }
+
+    public abstract String specificAttributes();
 
     public String getId() {
         return id.get();
@@ -118,21 +117,27 @@ public abstract class Animal {
         this.description.set(description);
     }
 
-    public File getImageFile() {
-        return imageFile;
+    public String getImageFileLocation() {
+        return imageFileLocation;
     }
 
-    public void setImageFile(File imageFile) {
-        this.imageFile = imageFile;
+    public void setImageFileLocation(String imageFileLocation) {
+        this.imageFileLocation = imageFileLocation;
     }
 
     public Type getType() {
         return type;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public boolean isAvailable() {
+        return available;
     }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+
 
     @Override
     public String toString() {
@@ -141,7 +146,7 @@ public abstract class Animal {
                 ", name=" + name +
                 ", color=" + color +
                 ", description=" + description +
-                ", imageFile=" + imageFile +
+                ", imageFile=" + imageFileLocation +
                 '}';
     }
 }

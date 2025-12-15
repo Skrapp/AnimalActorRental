@@ -9,6 +9,11 @@ public class Cat extends Animal{
         super(Type.CAT);
     }
 
+    @Override
+    public String specificAttributes() {
+        return exotic ? "Är ett tämjt vilddjur." : "Är en domesticerad katt.";
+    }
+
     public Cat(String name, String color, String description, File imageFile, boolean exotic) throws IOException {
         super(name, color, description, imageFile, Type.CAT);
         this.exotic = exotic;

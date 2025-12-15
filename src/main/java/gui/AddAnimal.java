@@ -2,7 +2,11 @@ package gui;
 
 import entity.animals.*;
 import javafx.collections.FXCollections;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import service.AnimalService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,13 +16,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import service.RentalService;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class AddAnimal {
     private final Stage primaryStage;
     private final AnimalService animalService;
+    private final Desktop desktop = Desktop.getDesktop();
 
     public AddAnimal(Stage primaryStage, AnimalService animalService) {
         this.primaryStage = primaryStage;
@@ -32,16 +41,33 @@ public class AddAnimal {
         ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList(Animal.getAllAnimalTypes()));
         Label nameLabel = new Label("Namn");
         TextField nameField = new TextField();
-        Label descriptionLabel = new Label("beskrivning");
+        Label descriptionLabel = new Label("Beskrivning");
         TextArea descriptionField = new TextArea();
+        descriptionField.setWrapText(true);
         descriptionField.setPrefWidth(220);
         Label colorLabel = new Label("Färg");
         TextField colorField = new TextField();
+
         Button toListButton = new Button("Se alla djur");
+
+        //Lägg till bild
+        Button addImageButton = new Button("Lägg till bild");
+        Label choosenImageLabel = new Label("Ingen bild vald");
+        AtomicReference<String> imageFileName = new AtomicReference<>("");
+        FileChooser fileChooser = new FileChooser();
+
+        addImageButton.setOnAction(e -> {
+                    File file = fileChooser.showOpenDialog(primaryStage);
+                    if (file != null) {
+                        imageFileName.set(file.getAbsolutePath());
+                        choosenImageLabel.setText(imageFileName.get());
+                    }
+        });
 
         VBox typeBox = new VBox(typeLabel, typeComboBox);
         VBox nameBox = new VBox(nameLabel, nameField);
         VBox ColorBox = new VBox(colorLabel, colorField);
+        VBox addImageBox = new VBox(addImageButton, choosenImageLabel);
         VBox descriptionBox = new VBox(descriptionLabel, descriptionField);
 
         //Fågel
@@ -70,11 +96,7 @@ public class AddAnimal {
 
         VBox animalTypeBox = new VBox(10);
 
-        VBox formBox = new VBox(10, typeBox, nameBox, ColorBox, descriptionBox, animalTypeBox, toListButton);
-        addHorseButton.setAlignment(Pos.CENTER_RIGHT);
-        addDogButton.setAlignment(Pos.CENTER_RIGHT);
-        addCatButton.setAlignment(Pos.CENTER_RIGHT);
-        addBirdButton.setAlignment(Pos.CENTER_RIGHT);
+        VBox formBox = new VBox(10, typeBox, nameBox, ColorBox, addImageBox, descriptionBox, animalTypeBox, toListButton);
         formBox.setAlignment(Pos.CENTER_RIGHT);
 
         BorderPane root = new BorderPane();
@@ -153,7 +175,9 @@ public class AddAnimal {
             }
         });
 
-        //toListButton.setOnAction(e-> new ListAnimals(primaryStage, memberService).start());
+
+
+        toListButton.setOnAction(e-> new ListAnimals(primaryStage, animalService, new RentalService()).start());
 
         //TODO om en level som behöver registering så som betalning eller studentkort ska en varning komma upp, och när
         // knapp trycks ska en popup dyka upp som man behöver hantera innan medlem skapas och läggs till.

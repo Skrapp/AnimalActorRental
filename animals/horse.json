@@ -1,9 +1,28 @@
 [ {
-  "id" : "A54",
-  "name" : "sfrth",
-  "color" : "sdhg",
-  "description" : "sdhg",
-  "imageFile" : null,
+  "id" : "A64",
+  "name" : "Boris",
+  "color" : "Vit",
+  "description" : "Tidigare cirkushäst, van med många trick och mycket folk. Försök inte rida på Boris, det tycker hon inte om.",
+  "imageFileLocation" : null,
   "type" : "HORSE",
+  "available" : true,
   "pony" : false
+}, {
+  "id" : "A65",
+  "name" : "Randall",
+  "color" : "Brun",
+  "description" : "Fin kraftig häst som tidigare arbetat på ett fält. Van att bli riden och bäst på att dra vagn.",
+  "imageFileLocation" : null,
+  "type" : "HORSE",
+  "available" : true,
+  "pony" : false
+}, {
+  "id" : "A66",
+  "name" : "Dennis",
+  "color" : "Sand",
+  "description" : "En ponny som älskar att bli klappad och mysa. Van med barn och andra djur.",
+  "imageFileLocation" : null,
+  "type" : "HORSE",
+  "available" : true,
+  "pony" : true
 } ]

@@ -13,6 +13,11 @@ public class Dog extends Animal{
         this.race = new SimpleStringProperty();
     }
 
+    @Override
+    public String specificAttributes() {
+        return getRace();
+    }
+
     public Dog(String name, String color, String description, File imageFile, String race) throws IOException {
         super(name, color, description, imageFile, Type.DOG);
         this.race = new SimpleStringProperty(race);

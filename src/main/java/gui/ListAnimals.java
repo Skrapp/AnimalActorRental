@@ -138,7 +138,7 @@ public class ListAnimals {
 
             rentButton.setOnAction(e -> sceneManager.showRoot(GUIType.RENT, animal));
 
-            HBox buttonBox = new HBox(20, rentButton, editButton, removeButton);
+            VBox buttonBox = new VBox(20, rentButton, editButton, removeButton);
             animalListing.getChildren().add(buttonBox);
             listingBox.getChildren().add(animalListing);
         }

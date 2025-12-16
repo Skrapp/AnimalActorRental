@@ -6,5 +6,6 @@
   "imageFileLocation" : "media\\animals\\Lassie.jpg",
   "animalType" : "DOG",
   "available" : true,
-  "race" : "Collie"
+  "race" : "Collie",
+  "price" : 2000
 } ]

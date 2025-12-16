@@ -35,7 +35,6 @@ public class AnimalListing {
             image.setPreserveRatio(true);
             listingBox.getChildren().add(image);
         } catch (FileNotFoundException | NullPointerException e) {
-            System.out.println("Bild hittas inte");
             //Finns inte placeholder bilden så används en text istället
             try {
                 image = new ImageView(new Image(new FileInputStream("media" + File.separator + "image not found.jpg")));
@@ -53,8 +52,9 @@ public class AnimalListing {
         Label availableLabel = new Label((animal.isAvailable() ? "Tillgänglig" : "Otillgänglig"));
         Text descriptionText = new Text(animal.getDescription() + "\n" + animal.specificAttributes());
         descriptionText.setWrappingWidth(listingBox.getMinWidth());
+        Label priceLabel = new Label(animal.getPrice() + " kr/dag");
 
-        VBox descriptionBox =  new VBox(10, typeLabel, availableLabel, nameLabel, descriptionText);
+        VBox descriptionBox =  new VBox(10, typeLabel, availableLabel, nameLabel, descriptionText, priceLabel);
         listingBox.getChildren().addAll(descriptionBox);
         listingBox.setPadding(new Insets(20));
         listingBox.setBorder(new Border(new BorderStroke(

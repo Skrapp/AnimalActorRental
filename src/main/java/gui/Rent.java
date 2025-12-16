@@ -21,8 +21,9 @@ public class Rent {
     private MemberService memberService;
     private Animal animalToRent;
 
-    TextField memberIDField;
-    HBox memberInfoBox;
+    private TextField memberIDField;
+    private HBox memberInfoBox;
+    private Member memberToRent;
 
     public Rent(SceneManager sceneManager,
                 RentalService rentalService, AnimalService animalService, MemberService memberService,
@@ -38,30 +39,50 @@ public class Rent {
         Label memberIDLabel = new Label("MedlemsID:");
         memberIDField = new TextField();
         Button findMemberButton = new Button("Hitta medlem");
-        HBox searchMemberBox = new HBox(10, memberIDLabel, memberIDField, findMemberButton);
-        Label noMember = new Label("Ingen medlem vald, skriv in medlemsID ovan");
-        memberInfoBox = new HBox(10,noMember);
+        Button listMembersButton = new Button("Se alla medlemmar");
+        HBox searchMemberBox = new HBox(10, memberIDLabel, memberIDField, findMemberButton, listMembersButton);
+        Label noMemberLabel = new Label("Ingen medlem vald, skriv in medlemsID ovan");
+        memberInfoBox = new HBox(10,noMemberLabel);
         HBox animalListing = new AnimalListing(animalToRent).getListing();
+        Label totalPrice = new Label(Double.toString(animalToRent.getPrice()));
 
-        findMemberButton.setOnAction(e -> displayMember());
 
-        VBox root = new VBox(20, searchMemberBox, memberInfoBox, animalListing);
+        findMemberButton.setOnAction(e -> {
+            Member member = getMemberFromField();
+            if(member != null) {
+                displayMember(member);
+                totalPrice.setText(Double.toString(updatePrice()));
+            }
+        });
+
+        VBox root = new VBox(20, searchMemberBox, memberInfoBox, animalListing, totalPrice);
         root.setPadding(new Insets(40));
         return root;
     }
 
-    private void displayMember() {
-        try {
-            Member member = memberService.getMemberByID(memberIDField.getText());
-            memberInfoBox.getChildren().setAll(
-                    new HBox(5, new Label("MedlemsID:"), new Label(member.getId())),
-                    new HBox(5, new Label("Namn:"), new Label(member.getName()))
-            );
+    private double updatePrice() {
+        return (memberToRent == null ? animalToRent.getPrice() : memberToRent.getLevel().applyDiscount(animalToRent.getPrice()));
+    }
+
+    private Member getMemberFromField() {
+        try{
+            memberToRent = memberService.getMemberByID(memberIDField.getText());
+            return memberToRent;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (MemberNotFoundException e) {
             memberInfoBox.getChildren().setAll(new Label("Finns ingen medlem med valt medlemsID"));
+            return null;
         }
+    }
+
+    private void displayMember(Member member) {
+        memberInfoBox.getChildren().setAll(
+            new HBox(5, new Label("MedlemsID:"), new Label(member.getId())),
+            new HBox(5, new Label("Namn:"), new Label(member.getName())),
+            new HBox(5, new Label("Level:"), new Label(member.getLevel().toString()))
+        );
+
     }
 
 

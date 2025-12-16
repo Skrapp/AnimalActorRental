@@ -6,7 +6,8 @@
   "imageFileLocation" : "media\\animals\\colorful-parrot-bird.jpg",
   "animalType" : "BIRD",
   "available" : true,
-  "flying" : true
+  "flying" : true,
+  "price" : 2000
 }, {
   "id" : "A60",
   "name" : "Nemo",
@@ -15,5 +16,6 @@
   "imageFileLocation" : "media\\animals\\Nemo.jpg",
   "animalType" : "BIRD",
   "available" : true,
-  "flying" : true
+  "flying" : true,
+  "price" : 2000
 } ]

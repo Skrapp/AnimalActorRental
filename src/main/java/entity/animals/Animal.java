@@ -126,10 +126,6 @@ public abstract class Animal {
         this.imageFileLocation = imageFileLocation;
     }
 
-    public AnimalType getAnimalType() {
-        return animalType;
-    }
-
     public boolean isAvailable() {
         return available;
     }
@@ -138,7 +134,17 @@ public abstract class Animal {
         this.available = available;
     }
 
+    public double getPrice() {
+        return price;
+    }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public AnimalType getAnimalType() {
+        return animalType;
+    }
 
     @Override
     public abstract String toString();

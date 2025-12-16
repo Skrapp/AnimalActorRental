@@ -6,7 +6,8 @@
   "imageFileLocation" : null,
   "animalType" : "CAT",
   "available" : true,
-  "exotic" : false
+  "exotic" : false,
+  "price" : 2000
 }, {
   "id" : "A70",
   "name" : "Charlie",
@@ -15,5 +16,6 @@
   "imageFileLocation" : "media\\animals\\Charlie.jpg",
   "animalType" : "CAT",
   "available" : true,
-  "exotic" : false
+  "exotic" : false,
+  "price" : 2000
 } ]

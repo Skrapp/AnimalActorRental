@@ -6,7 +6,8 @@
   "imageFileLocation" : null,
   "animalType" : "HORSE",
   "available" : true,
-  "pony" : false
+  "pony" : false,
+  "price" : 2000
 }, {
   "id" : "A66",
   "name" : "Dennis",
@@ -15,7 +16,8 @@
   "imageFileLocation" : null,
   "animalType" : "HORSE",
   "available" : true,
-  "pony" : true
+  "pony" : true,
+  "price" : 2000
 }, {
   "id" : "A71",
   "name" : "Randall",
@@ -24,5 +26,6 @@
   "imageFileLocation" : "media\\animals\\Randall.jpg",
   "animalType" : "HORSE",
   "available" : true,
-  "pony" : false
+  "pony" : false,
+  "price" : 2000
 } ]

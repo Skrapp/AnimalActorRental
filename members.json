@@ -32,6 +32,17 @@
     "type" : "Student",
     "priceReduction" : 400.0
   },
-  "rentalHistory" : [ ],
-  "productions" : 1
-} ]
+  "rentalHistory" : [ {
+    "animal" : {
+      "animalType" : "HORSE",
+      "id" : "A66",
+      "name" : "Dennis",
+      "color" : "Sand",
+      "description" : "En ponny som älskar att bli klappad och mysa. Van med barn och andra djur.",
+      "imageFileLocation" : null,
+      "animalType" : "HORSE",
+      "available" : true,
+      "price" : 2000.0,
+      "pony" : true
+    },
+    "dateFrom"

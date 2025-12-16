@@ -5,14 +5,14 @@ import entity.member.Member;
 import exceptions.MemberNotFoundException;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import service.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Rent {
     private SceneManager sceneManager;
@@ -24,6 +24,10 @@ public class Rent {
     private TextField memberIDField;
     private HBox memberInfoBox;
     private Member memberToRent;
+    private DatePicker datePickerFrom;
+    private DatePicker datePickerTo;
+    private Label totalPrice;
+    private Label totalDays;
 
     public Rent(SceneManager sceneManager,
                 RentalService rentalService, AnimalService animalService, MemberService memberService,
@@ -36,32 +40,138 @@ public class Rent {
     }
 
     public Parent start(){
+        //Hitta medlem
         Label memberIDLabel = new Label("MedlemsID:");
         memberIDField = new TextField();
         Button findMemberButton = new Button("Hitta medlem");
         Button listMembersButton = new Button("Se alla medlemmar");
         HBox searchMemberBox = new HBox(10, memberIDLabel, memberIDField, findMemberButton, listMembersButton);
+
+        findMemberButton.setOnAction(e -> updateMember());
+
+        listMembersButton.setOnAction(e -> sceneManager.showRoot(GUIType.LIST_ANIMALS));
+
         Label noMemberLabel = new Label("Ingen medlem vald, skriv in medlemsID ovan");
         memberInfoBox = new HBox(10,noMemberLabel);
+
+        //Djuret som ska hyras
         HBox animalListing = new AnimalListing(animalToRent).getListing();
-        Label totalPrice = new Label(Double.toString(animalToRent.getPrice()));
 
+        //Prisinfo
+        totalPrice = new Label(Double.toString(animalToRent.getPrice()));
+        totalDays = new Label("1 dag/-ar");
+        HBox priceBox = new HBox(10, totalDays, totalPrice);
 
-        findMemberButton.setOnAction(e -> {
-            Member member = getMemberFromField();
-            if(member != null) {
-                displayMember(member);
-                totalPrice.setText(Double.toString(updatePrice()));
+        //Välj datum
+        datePickerFrom = new DatePicker(LocalDate.now());
+        datePickerTo = new DatePicker();
+        Label dateFromLabel = new Label("Välj datum att hyra från");
+        Label dateToLabel = new Label("Väj datum att hyra till");
+        VBox dateFromBox = new VBox(dateFromLabel, datePickerFrom);
+        VBox dateToBox = new VBox(dateToLabel, datePickerTo);
+        HBox dateBox = new HBox(dateFromBox, dateToBox);
+
+        //TODO disable dagar som djuret redan på bokad på annat
+        //Disable dagarna innan idag och efter hyra-fram-till-datum
+        datePickerFrom.setDayCellFactory(d -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty
+                        || date.isBefore(LocalDate.now())
+                        || (datePickerTo.getValue() != null && date.isAfter(datePickerTo.getValue()))
+                );
             }
         });
+        datePickerFrom.setOnAction(e->{
+            LocalDate date = datePickerFrom.getValue();
+            System.err.println("Selected date: " + date);
+            updateDays();
+            updatePrice();
+        });
 
-        VBox root = new VBox(20, searchMemberBox, memberInfoBox, animalListing, totalPrice);
+        datePickerTo.setDayCellFactory(d -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(datePickerFrom.getValue().plusDays(1)));
+            }
+        });
+        datePickerTo.setOnAction(e->{
+            LocalDate date = datePickerFrom.getValue();
+            updateDays();
+            updatePrice();
+            System.err.println("Selected date: " + date);
+        });
+
+        //Välj att hyra eller att avbryta
+        Button rentButton = new Button("Hyr " + animalToRent.getName());
+        Button cancelButton = new Button("Avbryt");
+        HBox decisionBox = new HBox(20, rentButton, cancelButton);
+
+        cancelButton.setOnAction(e->sceneManager.showRoot(GUIType.LIST_ANIMALS));
+
+        rentButton.setOnAction(e->rent());
+
+        VBox root = new VBox(20, searchMemberBox, memberInfoBox, animalListing, priceBox, dateBox, decisionBox);
         root.setPadding(new Insets(40));
         return root;
     }
 
-    private double updatePrice() {
-        return (memberToRent == null ? animalToRent.getPrice() : memberToRent.getLevel().applyDiscount(animalToRent.getPrice()));
+    private void rent() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Ta emot betalning av hyra.");
+        alert.setTitle("Betalning");
+        alert.setHeaderText("Betalning");
+        ButtonType buttonType = alert.showAndWait().get();
+        if(buttonType.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)){
+            try {
+                memberService.updateMember(rentalService.rentAnimal(
+                        memberToRent, animalToRent,
+                        datePickerFrom.getValue(), datePickerTo.getValue(),
+                        getPrice())
+                );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (MemberNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                System.out.println(memberService.getMemberByID(memberToRent.getId()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (MemberNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void updateMember() {
+        memberToRent = getMemberFromField();
+        if(memberToRent != null) {
+            displayMember(memberToRent);
+            updatePrice();
+        }
+    }
+
+    private void updateDays() {
+        long days = getDays();
+        totalDays.setText(days + " dag/-ar");
+    }
+
+    private long getDays() {
+        return datePickerTo.getValue() == null ?
+                1 : ChronoUnit.DAYS.between(datePickerFrom.getValue(), datePickerTo.getValue());
+    }
+
+    private void updatePrice() {
+        double updatedPrice = getPrice();
+        totalPrice.setText(Double.toString(updatedPrice));
+    }
+
+    private double getPrice() {
+        return (memberToRent == null ?
+                animalToRent.getPrice() : memberToRent.getLevel().applyDiscount(animalToRent.getPrice())
+        ) * getDays();
     }
 
     private Member getMemberFromField() {
@@ -84,6 +194,4 @@ public class Rent {
         );
 
     }
-
-
 }

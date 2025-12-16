@@ -17,13 +17,8 @@ public class Dog extends Animal{
         return getRace();
     }
 
-    public Dog(String name, String color, String description, String imageFileLocation, String race) throws IOException {
-        super(name, color, description, imageFileLocation, AnimalType.DOG);
-        this.race = new SimpleStringProperty(race);
-    }
-
-    public Dog(String name, String color, String description, String race) throws IOException {
-        super(name, color, description, AnimalType.DOG);
+    public Dog(String name, String color, String description, String imageFileLocation, Double price, String race) throws IOException {
+        super(name, color, description, imageFileLocation, price, AnimalType.DOG);
         this.race = new SimpleStringProperty(race);
     }
 

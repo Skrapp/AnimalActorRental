@@ -134,21 +134,24 @@ public class ListAnimals {
 
             editButton.setOnAction(e -> sceneManager.showRoot(GUIType.EDIT_ANIMAL, animal));
 
-            removeButton.setOnAction(e -> {
-                try {
-                    animalService.removeAnimal(animal);
-                    animalListing.getChildren().clear();
-                    animalListing.getChildren().addAll(new Label(animal.getName() + " är borttagen"));
-                } catch (AnimalNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
+            removeButton.setOnAction(e -> removeAnimal(animal, animalListing));
+
+            rentButton.setOnAction(e -> sceneManager.showRoot(GUIType.RENT, animal));
 
             HBox buttonBox = new HBox(20, rentButton, editButton, removeButton);
             animalListing.getChildren().add(buttonBox);
             listingBox.getChildren().add(animalListing);
+        }
+    }
+
+    private void removeAnimal(Animal animal, HBox animalListing) {
+        try {
+            animalService.removeAnimal(animal);
+            animalListing.getChildren().setAll(new Label(animal.getName() + " är borttagen"));
+        } catch (AnimalNotFoundException ex) {
+            throw new RuntimeException(ex);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }

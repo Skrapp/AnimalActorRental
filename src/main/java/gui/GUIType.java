@@ -5,5 +5,6 @@ public enum GUIType {
     ADD_MEMBER,
     LIST_ANIMALS,
     LIST_MEMBERS,
-    EDIT_ANIMAL
+    EDIT_ANIMAL,
+    RENT
 }

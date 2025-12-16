@@ -14,13 +14,8 @@ public class Bird extends Animal{
         return flying ? "Kan flyga." : "Kan inte flyga.";
     }
 
-    public Bird(String name, String color, String description, String imageFileLocation, boolean flying) throws IOException {
-        super(name, color, description, imageFileLocation, AnimalType.BIRD);
-        this.flying = flying;
-    }
-
-    public Bird(String name, String color, String description, boolean flying) throws IOException {
-        super(name, color, description, AnimalType.BIRD);
+    public Bird(String name, String color, String description, String imageFileLocation, double price,  boolean flying) throws IOException {
+        super(name, color, description, imageFileLocation, price, AnimalType.BIRD);
         this.flying = flying;
     }
 

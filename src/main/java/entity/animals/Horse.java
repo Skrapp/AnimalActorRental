@@ -14,13 +14,8 @@ public class Horse extends Animal{
         return pony ? "Är av ponnymodell." : "";
     }
 
-    public Horse(String name, String color, String description, String imageFileLocation, boolean pony) throws IOException {
-        super(name, color, description, imageFileLocation, AnimalType.HORSE);
-        this.pony = pony;
-    }
-
-    public Horse(String name, String color, String description, boolean pony) throws IOException {
-        super(name, color, description, AnimalType.HORSE);
+    public Horse(String name, String color, String description, String imageFileLocation, Double price, boolean pony) throws IOException {
+        super(name, color, description, imageFileLocation, price, AnimalType.HORSE);
         this.pony = pony;
     }
 

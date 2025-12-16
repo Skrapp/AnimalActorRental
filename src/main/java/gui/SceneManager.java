@@ -40,11 +40,21 @@ public class SceneManager {
     public void showRoot(GUIType guiType, Object requiredData){
         Parent root;
         switch (guiType){
-            case EDIT_ANIMAL: if(requiredData instanceof Animal){
-                root = new EditAnimal(this, animalService, (Animal) requiredData).start();
-            }else {
-                throw new IllegalArgumentException("Data är inte av typen Animal: " + requiredData);
-            }
+            case EDIT_ANIMAL:
+                if(requiredData instanceof Animal){
+                    root = new EditAnimal(this, animalService, (Animal) requiredData).start();
+                }else {
+                    throw new IllegalArgumentException("Data är inte av typen Animal: " + requiredData);
+                }
+            break;
+            case RENT:
+                if(requiredData instanceof Animal){
+                    root = new Rent(this,
+                            rentalService, animalService, memberService,
+                            (Animal) requiredData).start();
+                }else {
+                    throw new IllegalArgumentException("Data är inte av typen Animal: " + requiredData);
+                }
             break;
             default: throw new NullPointerException("Denna GUIType finns inte: " + guiType.name());
         }

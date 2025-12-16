@@ -13,13 +13,8 @@ public class Cat extends Animal{
         return exotic ? "Är ett tämjt vilddjur." : "Är en domesticerad katt.";
     }
 
-    public Cat(String name, String color, String description, String imageFileLocation, boolean exotic) throws IOException {
-        super(name, color, description, imageFileLocation, AnimalType.CAT);
-        this.exotic = exotic;
-    }
-
-    public Cat(String name, String color, String description, boolean exotic) throws IOException {
-        super(name, color, description, AnimalType.CAT);
+    public Cat(String name, String color, String description, String imageFileLocation, double price, boolean exotic) throws IOException {
+        super(name, color, description, imageFileLocation, price, AnimalType.CAT);
         this.exotic = exotic;
     }
 

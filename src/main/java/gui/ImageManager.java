@@ -21,7 +21,11 @@ public class ImageManager {
     }
 
     //TODO Om det redan finns en fil, lägg på en siffra
+    //TODO om ingen fil väljs ska
     public static String saveFileToDirectory(String absoluteFileLocation, String targetDirectory) throws IOException {
+        if(absoluteFileLocation == null || absoluteFileLocation.isEmpty()){
+            return null;
+        }
         File absoluteFile = new File(absoluteFileLocation);
         File directory = new File(targetDirectory);
         if (!directory.isDirectory()){

@@ -32,6 +32,7 @@ public abstract class Animal {
     private String imageFileLocation;
     private AnimalType animalType;
     private boolean available = true;
+    private double price;
 
     public Animal() {
         this.id = new SimpleStringProperty();
@@ -45,12 +46,13 @@ public abstract class Animal {
         this.animalType = animalType;
     }
 
-    public Animal(String name, String color, String description, String imageFileLocation, AnimalType animalType) throws IOException {
+    public Animal(String name, String color, String description, String imageFileLocation, double price, AnimalType animalType) throws IOException {
         this.id = new SimpleStringProperty("A".concat(String.valueOf(IDCreator.getInstance().getNextId())));
         this.name = new SimpleStringProperty(name);
         this.color = new SimpleStringProperty(color);
         this.description = new SimpleStringProperty(description);
         this.imageFileLocation = imageFileLocation;
+        this.price = price;
         this.animalType = animalType;
     }
 

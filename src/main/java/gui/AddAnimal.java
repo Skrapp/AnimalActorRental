@@ -49,6 +49,8 @@ public class AddAnimal {
         TextField nameField = new TextField();
         Label descriptionLabel = new Label("Beskrivning");
         TextArea descriptionField = new TextArea();
+        Label priceLabel = new Label("Kostnad per dag");
+        TextArea priceField = new TextArea();
         descriptionField.setWrapText(true);
         descriptionField.setPrefWidth(500-40*2);
         Label colorLabel = new Label("Färg");
@@ -74,6 +76,7 @@ public class AddAnimal {
         VBox ColorBox = new VBox(colorLabel, colorField);
         VBox addImageBox = new VBox(addImageButton, choosenImageLabel);
         VBox descriptionBox = new VBox(descriptionLabel, descriptionField);
+        VBox priceBox = new VBox(priceLabel, priceField);
 
         //Fågel
         Label flyingLabel = new Label("kan fågeln flyga?");
@@ -116,7 +119,7 @@ public class AddAnimal {
             try {
                 animalService.addAnimal(new Bird(nameField.getText(), colorField.getText(), descriptionField.getText(),
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
-                        flyingCheckBox.isSelected()));
+                        Double.parseDouble(priceField.getText()), flyingCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, flyingCheckBox);
             } catch (NumberFormatException ex) {
                 System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
@@ -130,7 +133,7 @@ public class AddAnimal {
             try {
                 animalService.addAnimal(new Cat(nameField.getText(), colorField.getText(), descriptionField.getText(),
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
-                        exoticCheckBox.isSelected()));
+                        Double.parseDouble(priceField.getText()), exoticCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, exoticCheckBox);
             } catch (NumberFormatException ex) {
                 System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
@@ -144,7 +147,7 @@ public class AddAnimal {
             try {
                 animalService.addAnimal(new Dog(nameField.getText(), colorField.getText(), descriptionField.getText(),
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
-                        raceField.getText()));
+                        Double.parseDouble(priceField.getText()), raceField.getText()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
             } catch (NumberFormatException ex) {
                 System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
@@ -158,7 +161,7 @@ public class AddAnimal {
             try {
                 animalService.addAnimal(new Horse(nameField.getText(), colorField.getText(), descriptionField.getText(),
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
-                        ponyCheckBox.isSelected()));
+                        Double.parseDouble(priceField.getText()), ponyCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
             } catch (NumberFormatException ex) {
                 System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");

@@ -55,7 +55,7 @@ public class AddAnimal {
         AtomicReference<String> imageFileLocation = new AtomicReference<>("");
 
         addImageButton.setOnAction(e -> {
-                    File file = ImageGetter.chooseImage(addImageButton);
+                    File file = ImageManager.chooseImage(addImageButton);
                     if (file != null) {
                         imageFileLocation.set(file.getAbsolutePath());
                         choosenImageLabel.setText(imageFileLocation.get());
@@ -108,7 +108,7 @@ public class AddAnimal {
         addBirdButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Bird(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
+                        ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         flyingCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, flyingCheckBox);
             } catch (NumberFormatException ex) {
@@ -122,7 +122,7 @@ public class AddAnimal {
         addCatButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Cat(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
+                        ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         exoticCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, exoticCheckBox);
             } catch (NumberFormatException ex) {
@@ -136,7 +136,7 @@ public class AddAnimal {
         addDogButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Dog(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
+                        ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         raceField.getText()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
             } catch (NumberFormatException ex) {
@@ -150,7 +150,7 @@ public class AddAnimal {
         addHorseButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Horse(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
+                        ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         ponyCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
             } catch (NumberFormatException ex) {
@@ -218,19 +218,5 @@ public class AddAnimal {
                 ((CheckBox)field).setSelected(false);
             }
         }
-    }
-
-    //TODO flytta till annan klass
-    //TODO Om det redan finns en fil, lägg på en siffra
-    private String saveFileToDirectory(String absoluteFileLocation, String targetDirectory) throws IOException {
-        File absoluteFile = new File(absoluteFileLocation);
-        File directory = new File(targetDirectory);
-        if (!directory.isDirectory()){
-            System.out.println("fel");
-            throw new FileAlreadyExistsException(targetDirectory + " är inte en mapp");
-        }
-        File newFile = new File(targetDirectory + File.separator + absoluteFile.getName());
-        Files.copy(absoluteFile.toPath(), newFile.toPath());
-        return newFile.getPath();
     }
 }

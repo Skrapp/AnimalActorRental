@@ -17,24 +17,14 @@ public class AnimalService {
 
 
 
-    /*public void removeAnimal(Animal animalToRemove) throws IOException, AnimalNotFoundException {
-        List<String> animalsId = new ArrayList<>();
-        animalsId.add(animalToRemove.getId());
-        animalRegistry.removeAnimalByID(animalsId);
-    }*/
+    public void removeAnimal(Animal animalToRemove) throws IOException, AnimalNotFoundException {
+        animalRegistry.removeAnimalByID(animalToRemove.getId(), animalToRemove.getAnimalType());
+    }
 
-   /* public void removeAnimals(List<Animal> animals) throws IOException, AnimalNotFoundException {
-        List<String> animalsId =
-                animals.stream()
-                        .map(Animal::getId)
-                        .collect(Collectors.toList());
-        animalRegistry.removeAnimalByID(animalsId);
-    }*/
-
-    /*public void updateAnimal(Animal animal) throws IOException, AnimalNotFoundException {
+    public void updateAnimal(Animal animal) throws IOException, AnimalNotFoundException {
         removeAnimal(animal);
         addAnimal(animal);
-    }*/
+    }
 
     public Animal getAnimalByID(String id) throws IOException, AnimalNotFoundException {
         List<Animal> allAnimals = getAllAnimals();

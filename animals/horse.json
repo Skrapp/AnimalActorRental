@@ -4,16 +4,7 @@
   "color" : "Vit",
   "description" : "Tidigare cirkushäst, van med många trick och mycket folk. Försök inte rida på Boris, det tycker hon inte om.",
   "imageFileLocation" : null,
-  "type" : "HORSE",
-  "available" : true,
-  "pony" : false
-}, {
-  "id" : "A65",
-  "name" : "Randall",
-  "color" : "Brun",
-  "description" : "Fin kraftig häst som tidigare arbetat på ett fält. Van att bli riden och bäst på att dra vagn.",
-  "imageFileLocation" : null,
-  "type" : "HORSE",
+  "animalType" : "HORSE",
   "available" : true,
   "pony" : false
 }, {
@@ -22,7 +13,16 @@
   "color" : "Sand",
   "description" : "En ponny som älskar att bli klappad och mysa. Van med barn och andra djur.",
   "imageFileLocation" : null,
-  "type" : "HORSE",
+  "animalType" : "HORSE",
   "available" : true,
   "pony" : true
+}, {
+  "id" : "A71",
+  "name" : "Randall",
+  "color" : "Brun",
+  "description" : "Fin kraftig häst som tidigare arbetat på ett fält. Van att bli riden och bäst på att dra vagn.",
+  "imageFileLocation" : "media\\animals\\Randall.jpg",
+  "animalType" : "HORSE",
+  "available" : true,
+  "pony" : false
 } ]

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import entity.IDCreator;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
+        property = "animalType"
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Bird.class, name = "BIRD"),
@@ -31,7 +30,7 @@ public abstract class Animal {
     private SimpleStringProperty color;
     private SimpleStringProperty description;
     private String imageFileLocation;
-    private Type type;
+    private AnimalType animalType;
     private boolean available = true;
 
     public Animal() {
@@ -41,26 +40,26 @@ public abstract class Animal {
         this.description = new SimpleStringProperty();
     }
 
-    public Animal(Type type) {
+    public Animal(AnimalType animalType) {
         this();
-        this.type = type;
+        this.animalType = animalType;
     }
 
-    public Animal(String name, String color, String description, String imageFileLocation, Type type) throws IOException {
+    public Animal(String name, String color, String description, String imageFileLocation, AnimalType animalType) throws IOException {
         this.id = new SimpleStringProperty("A".concat(String.valueOf(IDCreator.getInstance().getNextId())));
         this.name = new SimpleStringProperty(name);
         this.color = new SimpleStringProperty(color);
         this.description = new SimpleStringProperty(description);
         this.imageFileLocation = imageFileLocation;
-        this.type = type;
+        this.animalType = animalType;
     }
 
-    public Animal( String name, String color, String description, Type type) throws IOException {
+    public Animal( String name, String color, String description, AnimalType animalType) throws IOException {
         this.id = new SimpleStringProperty("A".concat(String.valueOf(IDCreator.getInstance().getNextId())));;
         this.name = new SimpleStringProperty(name);
         this.color = new SimpleStringProperty(color);
         this.description = new SimpleStringProperty(description);
-        this.type = type;
+        this.animalType = animalType;
     }
 
     public static List<String> getAllAnimalTypes(){
@@ -125,8 +124,8 @@ public abstract class Animal {
         this.imageFileLocation = imageFileLocation;
     }
 
-    public Type getType() {
-        return type;
+    public AnimalType getAnimalType() {
+        return animalType;
     }
 
     public boolean isAvailable() {
@@ -140,13 +139,5 @@ public abstract class Animal {
 
 
     @Override
-    public String toString() {
-        return "Animal{" +
-                "id=" + id +
-                ", name=" + name +
-                ", color=" + color +
-                ", description=" + description +
-                ", imageFile=" + imageFileLocation +
-                '}';
-    }
+    public abstract String toString();
 }

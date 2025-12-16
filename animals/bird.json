@@ -1,28 +1,19 @@
 [ {
-  "id" : "A58",
-  "name" : "Polly",
-  "color" : "Grön",
-  "description" : "Vet hur man festar, älskar kakor.",
-  "imageFileLocation" : null,
-  "type" : "BIRD",
-  "available" : true,
-  "flying" : true
-}, {
-  "id" : "A60",
-  "name" : "Nemo",
-  "color" : "Gul",
-  "description" : "Lugn och medgörlig. Van med att lyftas och flyga till markers.",
-  "imageFileLocation" : null,
-  "type" : "BIRD",
-  "available" : true,
-  "flying" : true
-}, {
   "id" : "A68",
   "name" : "Fredde",
   "color" : "Grön, blå, gul",
   "description" : "En fågel som vet med hyss. Men med kakor funkar allt.",
   "imageFileLocation" : "media\\animals\\colorful-parrot-bird.jpg",
-  "type" : "BIRD",
+  "animalType" : "BIRD",
+  "available" : true,
+  "flying" : true
+}, {
+  "id" : "A60",
+  "name" : "Nemo",
+  "color" : "Gul och något grön",
+  "description" : "Lugn och medgörlig. Van med att lyftas och flyga till markers.",
+  "imageFileLocation" : "media\\animals\\Nemo.jpg",
+  "animalType" : "BIRD",
   "available" : true,
   "flying" : true
 } ]

@@ -1,28 +1,10 @@
 [ {
-  "id" : "A61",
-  "name" : "Doris",
-  "color" : "Tabby",
-  "description" : "Energisk, gillar att jaga och leka apport. ",
-  "imageFileLocation" : null,
-  "type" : "CAT",
-  "available" : true,
-  "exotic" : false
-}, {
-  "id" : "A62",
-  "name" : "Leon",
-  "color" : "Sand",
-  "description" : "Starkt lejon som gör allt för mat. Van framför kamera.",
-  "imageFileLocation" : null,
-  "type" : "CAT",
-  "available" : true,
-  "exotic" : true
-}, {
   "id" : "A63",
   "name" : "Bilbo",
   "color" : "Svart",
   "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
   "imageFileLocation" : null,
-  "type" : "CAT",
+  "animalType" : "CAT",
   "available" : true,
   "exotic" : false
 }, {
@@ -31,7 +13,7 @@
   "color" : "Svart-vit",
   "description" : "En katt med stolthet och regalitet, kan inga trick men är fin att ha i närheten. Ge ost när nödvändigt.",
   "imageFileLocation" : "media\\animals\\Charlie.jpg",
-  "type" : "CAT",
+  "animalType" : "CAT",
   "available" : true,
   "exotic" : false
 } ]

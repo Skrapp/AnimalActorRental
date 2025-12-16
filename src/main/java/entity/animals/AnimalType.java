@@ -1,6 +1,6 @@
 package entity.animals;
 
-public enum Type {
+public enum AnimalType {
     BIRD("Fågel"),
     CAT("Katt"),
     DOG("Hund"),
@@ -8,7 +8,7 @@ public enum Type {
 
     String swedish;
 
-    Type(String swedish) {
+    AnimalType(String swedish) {
         this.swedish = swedish;
     }
 

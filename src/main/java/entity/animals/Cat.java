@@ -1,12 +1,11 @@
 package entity.animals;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Cat extends Animal{
     private boolean exotic;
     public Cat() {
-        super(Type.CAT);
+        super(AnimalType.CAT);
     }
 
     @Override
@@ -15,12 +14,12 @@ public class Cat extends Animal{
     }
 
     public Cat(String name, String color, String description, String imageFileLocation, boolean exotic) throws IOException {
-        super(name, color, description, imageFileLocation, Type.CAT);
+        super(name, color, description, imageFileLocation, AnimalType.CAT);
         this.exotic = exotic;
     }
 
     public Cat(String name, String color, String description, boolean exotic) throws IOException {
-        super(name, color, description, Type.CAT);
+        super(name, color, description, AnimalType.CAT);
         this.exotic = exotic;
     }
 
@@ -30,5 +29,17 @@ public class Cat extends Animal{
 
     public void setExotic(boolean exotic) {
         this.exotic = exotic;
+    }
+
+    @Override
+    public String toString() {
+        return "Cat{" +
+                "id=" + getId() +
+                ", name=" + getName() +
+                ", color=" + getColor() +
+                ", description=" + getDescription() +
+                ", imageFile=" + getImageFileLocation() +
+                ", exotic=" + exotic +
+                '}';
     }
 }

@@ -1,13 +1,12 @@
 package entity.animals;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Bird extends Animal{
     private boolean flying;
     
     public Bird() {
-        super(Type.BIRD);
+        super(AnimalType.BIRD);
     }
 
     @Override
@@ -16,12 +15,12 @@ public class Bird extends Animal{
     }
 
     public Bird(String name, String color, String description, String imageFileLocation, boolean flying) throws IOException {
-        super(name, color, description, imageFileLocation, Type.BIRD);
+        super(name, color, description, imageFileLocation, AnimalType.BIRD);
         this.flying = flying;
     }
 
     public Bird(String name, String color, String description, boolean flying) throws IOException {
-        super(name, color, description, Type.BIRD);
+        super(name, color, description, AnimalType.BIRD);
         this.flying = flying;
     }
 
@@ -31,5 +30,17 @@ public class Bird extends Animal{
 
     public void setFlying(boolean flying) {
         this.flying = flying;
+    }
+
+    @Override
+    public String toString() {
+        return "Bird{" +
+                "id=" + getId() +
+                ", name=" + getName() +
+                ", color=" + getColor() +
+                ", description=" + getDescription() +
+                ", imageFile=" + getImageFileLocation() +
+                ", flying=" + flying +
+                '}';
     }
 }

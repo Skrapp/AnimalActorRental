@@ -3,6 +3,8 @@ package dao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import entity.animals.Animal;
+import entity.animals.AnimalType;
+import exceptions.AnimalNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,20 +36,21 @@ public class AnimalRegistry {
                 .collect(Collectors.toSet());
     }
 
-    /*public void removeAnimalByID(List<String> ids) throws IOException, AnimalNotFoundException {
-        List<Animal> animals = getAnimals();
+    public void removeAnimalByID(String id, AnimalType type) throws IOException, AnimalNotFoundException {
+        File animalFile = new File(directory.concat(File.separator).concat(type.name().toLowerCase()).concat(".json"));
+        List<Animal> animals = getAnimals(animalFile);
         //Om det inte finns någon djur med givet id så kan det inte tas bort, därav är det troligtvis fel någonstans
-        for(String id : ids) {
-            if (!animals.removeIf(m -> m.getId().equals(id))) {
-                throw new AnimalNotFoundException("Djur med id \"" + id + "\" finns inte i djurregister.");
-            }
+        if (!animals.removeIf(a -> a.getId().equals(id))) {
+            throw new AnimalNotFoundException("Djur med id \"" + id + "\" finns inte i djurregister.");
         }
-        reloadFile(animals);
-    }*/
+
+        reloadFile(animalFile, animals);
+        System.out.println(id +" är borttagen.");
+    }
 
     public boolean addAnimal(Animal animal) throws IOException{
-        Class<? extends Animal> animalClass = animal.getClass();
-        File animalFile = new File(directory.concat("\\").concat(animalClass.getSimpleName().toLowerCase()).concat(".json"));
+        String animalType = animal.getAnimalType().name().toLowerCase();
+        File animalFile = new File(directory.concat(File.separator).concat(animalType).concat(".json"));
         List<Animal> animals = getAnimals(animalFile);
         animals.add(animal);
         reloadFile(animalFile, animals);
@@ -57,7 +60,7 @@ public class AnimalRegistry {
     public List<Animal> getAllAnimals() throws IOException {
         List <Animal> animals = new ArrayList<>();
         for(String fileName : fileNames){
-            animals.addAll(getAnimals(new File(directory.concat("\\").concat(fileName))));
+            animals.addAll(getAnimals(new File(directory.concat(File.separator).concat(fileName))));
         }
         return animals;
     }

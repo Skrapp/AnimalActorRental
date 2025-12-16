@@ -2,10 +2,15 @@ package service;
 
 import dao.AnimalRegistry;
 import entity.animals.Animal;
+import entity.animals.AnimalType;
 import exceptions.AnimalNotFoundException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AnimalService {
     private AnimalRegistry animalRegistry = new AnimalRegistry("animals");
@@ -43,46 +48,20 @@ public class AnimalService {
     /**
      * Filtrerar och sorterar djur från fil.
      *
-     * @param searchWord         filtrerar enligt sökord på namn eller id
-     * @param pricePolicyClasses filtrera enligt pricePolicy. För att inkludera alla PricePolicy använd pricePolicy.class
+     * @param searchWord filtrerar enligt sökord på id, namn, färg eller beskrivning
+     * @param animalClass klass att filtrera. Använd superklassen Animal för att filtrera från alla djur.
      * @return returnerar set med medlemmar
      * @throws IOException Om fil inte kan läsas kastas exception
-     *//*
-    public Set<Animal> getFilteredAnimals(String searchWord, Class<? extends Animal>)
+     */
+    public List<Animal> getFilteredAnimals(String searchWord, Class<? extends Animal> animalClass)
             throws IOException {
-        Set<Animal> animalsSinglePricePolicy;
-        Set<Animal> animals = new HashSet<>();
-        for(Class<? extends PricePolicy> pricePolicyClass : pricePolicyClasses){
-            animalsSinglePricePolicy = animalRegistry.getAnimals().stream()
-                    .filter(m -> (pricePolicyClass.isInstance(m.getLevel())
-                            && (m.getName().toLowerCase().contains(searchWord.toLowerCase())
-                            || m.getId().toLowerCase().contains(searchWord.toLowerCase()))
-                            && m.getProductions() >= minProductions && m.getProductions() <= maxProductions))
-                    .collect(Collectors.toCollection(HashSet::new));
-            animals.addAll(animalsSinglePricePolicy);
-        }
+        List<Animal> animals = animalRegistry.getAllAnimals().stream()
+                .filter(a -> (animalClass.isInstance(a))
+                        && (a.getName().toLowerCase().contains(searchWord.toLowerCase())
+                        || a.getId().toLowerCase().contains(searchWord.toLowerCase())
+                        || a.getColor().toLowerCase().contains(searchWord.toLowerCase())
+                        || a.getDescription().toLowerCase().contains(searchWord.toLowerCase())))
+                .collect(Collectors.toList());
         return animals;
     }
-
-    *//**
-     * TODO Fixa så att ifall minProduction eller maxProduction är tomma ska det inte räknas
-     * @param searchWord
-     * @param pricePolicyClasses
-     * @return
-     * @throws IOException
-     *//*
-    public Set<Animal> getFilteredAnimals(String searchWord, List<Class<? extends PricePolicy>> pricePolicyClasses)
-            throws IOException {
-        Set<Animal> animalsSinglePricePolicy;
-        Set<Animal> animals = new HashSet<>();
-        for(Class<? extends PricePolicy> pricePolicyClass : pricePolicyClasses){
-            animalsSinglePricePolicy = animalRegistry.getAnimals().stream()
-                    .filter(m -> (pricePolicyClass.isInstance(m.getLevel())
-                            && (m.getName().toLowerCase().contains(searchWord.toLowerCase())
-                            || m.getId().toLowerCase().contains(searchWord.toLowerCase()))))
-                    .collect(Collectors.toCollection(HashSet::new));
-            animals.addAll(animalsSinglePricePolicy);
-        }
-        return animals;
-    }*/
 }

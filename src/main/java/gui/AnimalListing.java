@@ -64,7 +64,6 @@ public class AnimalListing {
                         new BorderWidths(3)))
         );
 
-
         return listingBox;
     }
 }

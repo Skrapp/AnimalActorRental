@@ -20,8 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class AddAnimal {
     private final SceneManager sceneManager;
@@ -37,7 +39,12 @@ public class AddAnimal {
         //Skapar och placerar nodes
         Label titleLabel = new Label("Lägg till nytt djur");
         Label typeLabel = new Label("Välj typ av djur");
-        ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList(Animal.getAllAnimalTypes()));
+        ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList(
+                        Arrays.stream(
+                                AnimalType.values())
+                                .map(AnimalType::getSwedish)
+                                .collect(Collectors.toList()))
+        );
         Label nameLabel = new Label("Namn");
         TextField nameField = new TextField();
         Label descriptionLabel = new Label("Beskrivning");

@@ -49,14 +49,14 @@ public class AnimalService {
      * Filtrerar och sorterar djur från fil.
      *
      * @param searchWord filtrerar enligt sökord på id, namn, färg eller beskrivning
-     * @param animalClass klass att filtrera. Använd superklassen Animal för att filtrera från alla djur.
+     * @param animalType djurtyp att filtrera. Använd null för att filtrera från alla djur.
      * @return returnerar set med medlemmar
      * @throws IOException Om fil inte kan läsas kastas exception
      */
-    public List<Animal> getFilteredAnimals(String searchWord, Class<? extends Animal> animalClass)
+    public List<Animal> getFilteredAnimals(String searchWord, AnimalType animalType)
             throws IOException {
         List<Animal> animals = animalRegistry.getAllAnimals().stream()
-                .filter(a -> (animalClass.isInstance(a))
+                .filter(a -> (animalType == null || animalType.equals(a.getAnimalType()))
                         && (a.getName().toLowerCase().contains(searchWord.toLowerCase())
                         || a.getId().toLowerCase().contains(searchWord.toLowerCase())
                         || a.getColor().toLowerCase().contains(searchWord.toLowerCase())

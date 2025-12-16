@@ -72,34 +72,43 @@ public class EditAnimal {
         VBox imageBox = new VBox(addImageButton, choosenImageLabel);
         VBox descriptionBox = new VBox(descriptionLabel, descriptionField);
 
-        //Fågel
-        Label flyingLabel = new Label("kan fågeln flyga?");
-        flyingCheckBox = new CheckBox("Ja");
-        Button saveBirdButton = new Button("Spara fågel");
-        VBox birdBox = new VBox(flyingLabel, flyingCheckBox);
-
-        //Katt
-        Label exoticLabel = new Label("Är katten exotisk, så som lejon eller vildkatt?");
-        exoticCheckBox = new CheckBox("Ja");
-        Button saveCatButton = new Button("Spara katt");
-        VBox catBox = new VBox(exoticLabel, exoticCheckBox);
-
-        //Hund
-        Label raceLabel = new Label("Hundras");
-        raceField = new TextField();
-        Button saveDogButton = new Button("Spara hund");
-        VBox dogBox = new VBox(raceLabel, raceField);
-
-        //Häst
-        Label ponyLabel = new Label("Är hästen en ponny?");
-        ponyCheckBox = new CheckBox("Ja");
-        Button saveHorseButton = new Button("Spara häst");
-        VBox horseBox = new VBox(ponyLabel, ponyCheckBox);
-
-        VBox animalTypeBox = new VBox(10);
-
-        VBox formBox = new VBox(10, nameBox, colorBox, imageBox, descriptionBox, animalTypeBox, toListButton);
+        VBox formBox = new VBox(10, nameBox, colorBox, imageBox, descriptionBox);
         formBox.setAlignment(Pos.CENTER_RIGHT);
+
+        switch (animal.getAnimalType()){
+            case BIRD:
+                Label flyingLabel = new Label("kan fågeln flyga?");
+                flyingCheckBox = new CheckBox("Ja");
+                flyingCheckBox.setSelected(((Bird)animal).isFlying());
+                VBox birdBox = new VBox(flyingLabel, flyingCheckBox);
+                formBox.getChildren().addAll(birdBox);
+                break;
+            case CAT:
+                Label exoticLabel = new Label("Är katten exotisk, så som lejon eller vildkatt?");
+                exoticCheckBox = new CheckBox("Ja");
+                exoticCheckBox.setSelected(((Cat)animal).isExotic());
+                VBox catBox = new VBox(exoticLabel, exoticCheckBox);
+                formBox.getChildren().addAll(catBox);
+                break;
+            case DOG:
+                Label raceLabel = new Label("Hundras");
+                raceField = new TextField();
+                raceField.setText(((Dog)animal).getRace());
+                VBox dogBox = new VBox(raceLabel, raceField);
+                formBox.getChildren().addAll(dogBox);
+                break;
+            case HORSE: Label ponyLabel = new Label("Är hästen en ponny?");
+                ponyCheckBox = new CheckBox("Ja");
+                ponyCheckBox.setSelected(((Horse)animal).isPony());
+                VBox horseBox = new VBox(ponyLabel, ponyCheckBox);
+                formBox.getChildren().addAll(horseBox);
+                break;
+            default: throw new IllegalArgumentException("Är inte av typen Animal: " + animal.getAnimalType().getSwedish());
+        }
+        Button saveButton = new Button("Uppdatera");
+        saveButton.setOnAction(e-> updateAnimal());
+
+        formBox.getChildren().addAll(toListButton, saveButton);
 
         BorderPane root = new BorderPane();
         root.setTop(titleLabel);
@@ -107,114 +116,61 @@ public class EditAnimal {
         root.setRight(formBox);
         root.setPadding(new Insets(40));
 
-        //Funktioner till nodes
         //TODO grafisk varning
-        saveBirdButton.setOnAction(e-> {
-            try {
-                updateAnimal();
-                animalService.updateAnimal(animal);
-            } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
-                System.out.println(ex);
-            } catch (AnimalNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        saveCatButton.setOnAction(e-> {
-            try {
-                updateAnimal();
-                animalService.updateAnimal(animal);
-            } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
-                System.out.println(ex);
-            } catch (AnimalNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        saveDogButton.setOnAction(e-> {
-            try {
-                updateAnimal();
-                animalService.updateAnimal(animal);
-            } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
-                System.out.println(ex);
-            } catch (AnimalNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        saveHorseButton.setOnAction(e-> {
-            try {
-                updateAnimal();
-                animalService.updateAnimal(animal);
-            } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
-                System.out.println(ex);
-            } catch (AnimalNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-
-        switch (animal.getAnimalType()){
-            case BIRD: animalTypeBox.getChildren().setAll(birdBox, saveBirdButton);
-            break;
-            case CAT: animalTypeBox.getChildren().setAll(catBox, saveCatButton);
-            break;
-            case DOG: animalTypeBox.getChildren().setAll(dogBox, saveDogButton);
-            break;
-            case HORSE: animalTypeBox.getChildren().setAll(horseBox, saveHorseButton);
-            break;
-            default: throw new IllegalArgumentException("Är inte av typen Animal: " + animal.getAnimalType().getSwedish());
-        }
 
         toListButton.setOnAction(e-> sceneManager.showRoot(GUIType.LIST_ANIMALS));
         return root;
 
     }
 
-    private void updateAnimal() throws IOException {
-        if(!nameField.getText().trim().equals(animal.getName())){
+    private void updateAnimal() {
+        try {
+            if(!nameField.getText().trim().equals(animal.getName())){
             animal.setName(nameField.getText().trim());
-        }
-        if(!colorField.getText().trim().equals(animal.getColor())){
-            animal.setColor(colorField.getText().trim());
-        }
-        if(!descriptionField.getText().trim().equals(animal.getDescription())){
-            animal.setDescription(descriptionField.getText().trim());
-        }
-        if(!imageFileLocation.get().equals(animal.getImageFileLocation())){
-            animal.setImageFileLocation(
-                    ImageManager.saveFileToDirectory(imageFileLocation.get(),
-                    "media" + File.separator + "animals")
-            );
-        }
-        switch (animal.getAnimalType()){
-            case BIRD:
-                if(flyingCheckBox.isSelected() != ((Bird)animal).isFlying()){
-                    ((Bird)animal).setFlying(flyingCheckBox.isSelected());
-                }
-            break;
-            case CAT:
-                if(exoticCheckBox.isSelected() != ((Cat)animal).isExotic()){
-                    ((Cat)animal).setExotic(exoticCheckBox.isSelected());
-                }
-            break;
+            }
+            if(!colorField.getText().trim().equals(animal.getColor())){
+                animal.setColor(colorField.getText().trim());
+            }
+            if(!descriptionField.getText().trim().equals(animal.getDescription())){
+                animal.setDescription(descriptionField.getText().trim());
+            }
+            if(!imageFileLocation.get().equals(animal.getImageFileLocation())){
+                animal.setImageFileLocation(
+                        ImageManager.saveFileToDirectory(imageFileLocation.get(),
+                        "media" + File.separator + "animals")
+                );
+            }
+            switch (animal.getAnimalType()){
+                case BIRD:
+                    if(flyingCheckBox.isSelected() != ((Bird)animal).isFlying()){
+                        ((Bird)animal).setFlying(flyingCheckBox.isSelected());
+                    }
+                break;
+                case CAT:
+                    if(exoticCheckBox.isSelected() != ((Cat)animal).isExotic()){
+                        ((Cat)animal).setExotic(exoticCheckBox.isSelected());
+                    }
+                break;
 
-            case DOG:
-                if(raceField.getText().trim().equals(((Dog)animal).getRace())){
-                    ((Dog)animal).setRace(raceField.getText());
-                }
-                break;
-            case HORSE:
-                if(ponyCheckBox.isSelected() != ((Horse)animal).isPony()){
-                    ((Horse)animal).setPony(ponyCheckBox.isSelected());
-                }
-                break;
-            default:
-                throw new IllegalArgumentException(animal.getAnimalType().getSwedish() + " är inte av typen Animal.");
+                case DOG:
+                    if(!raceField.getText().trim().equals(((Dog)animal).getRace())){
+                        ((Dog)animal).setRace(raceField.getText());
+                    }
+                    break;
+                case HORSE:
+                    if(ponyCheckBox.isSelected() != ((Horse)animal).isPony()){
+                        ((Horse)animal).setPony(ponyCheckBox.isSelected());
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException(animal.getAnimalType().getSwedish() + " är inte av typen Animal.");
+            }
+
+            animalService.updateAnimal(animal);
+        } catch (AnimalNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e){
+            throw new RuntimeException(e);
         }
     }
 

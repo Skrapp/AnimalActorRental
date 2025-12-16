@@ -2,7 +2,7 @@
   "id" : "A73",
   "name" : "Pal",
   "color" : "Gul och vit",
-  "description" : "Känd för många filmer och älskad av alla. Pal är en gammal hund men, du behöver inte lära honom några nya trick för han kan redan alla.",
+  "description" : "Känd för många filmer och älskad av alla. Du behöver inte lära denna gamla hund några nya trick, för han kan redan alla.",
   "imageFileLocation" : "media\\animals\\Lassie.jpg",
   "animalType" : "DOG",
   "available" : true,

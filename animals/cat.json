@@ -20,8 +20,17 @@
   "id" : "A63",
   "name" : "Bilbo",
   "color" : "Svart",
-  "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart somn helst och han kommer sitta där tills det är matdags.",
+  "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
   "imageFileLocation" : null,
+  "type" : "CAT",
+  "available" : true,
+  "exotic" : false
+}, {
+  "id" : "A70",
+  "name" : "Charlie",
+  "color" : "Svart-vit",
+  "description" : "En katt med stolthet och regalitet, kan inga trick men är fin att ha i närheten. Ge ost när nödvändigt.",
+  "imageFileLocation" : "media\\animals\\Charlie.jpg",
   "type" : "CAT",
   "available" : true,
   "exotic" : false

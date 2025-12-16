@@ -8,24 +8,6 @@
   "rentalHistory" : [ ],
   "productions" : 20
 }, {
-  "id" : "M17",
-  "name" : "Linus",
-  "level" : {
-    "type" : "Student",
-    "priceReduction" : 400.0
-  },
-  "rentalHistory" : [ ],
-  "productions" : 3
-}, {
-  "id" : "M18",
-  "name" : "Gustaf",
-  "level" : {
-    "type" : "Student",
-    "priceReduction" : 400.0
-  },
-  "rentalHistory" : [ ],
-  "productions" : 50
-}, {
   "id" : "M40",
   "name" : "zxfg",
   "level" : {
@@ -35,4 +17,21 @@
   },
   "rentalHistory" : [ ],
   "productions" : 6
+}, {
+  "id" : "M17",
+  "name" : "Linus",
+  "level" : {
+    "type" : "Regular"
+  },
+  "rentalHistory" : [ ],
+  "productions" : 1
+}, {
+  "id" : "M18",
+  "name" : "Gustaf",
+  "level" : {
+    "type" : "Student",
+    "priceReduction" : 400.0
+  },
+  "rentalHistory" : [ ],
+  "productions" : 1
 } ]

@@ -1,6 +1,11 @@
-import gui.MainGUI;
+import gui.AddAnimal;
+import gui.GUIType;
+import gui.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import service.AnimalService;
+import service.MemberService;
+import service.RentalService;
 
 /*Du har fått en provanställning på Wigellkoncernen och som andra uppdrag ska du bygga en
   Java-applikation med grafiskt gränssnitt som modellerar en medlemsklubb med uthyrning av
@@ -66,7 +71,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        MainGUI mainGUI = new MainGUI(primaryStage);
-        mainGUI.start();
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(700);
+        primaryStage.show();
+
+        SceneManager sceneManager = new SceneManager(primaryStage, new MemberService(), new AnimalService(), new RentalService());
+        sceneManager.showRoot(GUIType.ADD_ANIMAL);
     }
 }

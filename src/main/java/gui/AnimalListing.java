@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,8 +18,10 @@ import java.io.FileNotFoundException;
 
 public class AnimalListing {
     Animal animal;
+    SceneManager sceneManager;
 
-    public AnimalListing(Animal animal) {
+    public AnimalListing(SceneManager sceneManager, Animal animal) {
+        this.sceneManager = sceneManager;
         this.animal = animal;
     }
 
@@ -67,6 +70,8 @@ public class AnimalListing {
                         new CornerRadii(10),
                         new BorderWidths(3)))
         );
+
+        editButton.setOnAction(e -> sceneManager.showRoot(GUIType.EDIT_ANIMAL, animal));
         return listingBox;
     }
 }

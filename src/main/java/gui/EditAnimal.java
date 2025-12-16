@@ -1,21 +1,19 @@
 package gui;
 
 import entity.animals.*;
-import javafx.collections.FXCollections;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import service.AnimalService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import service.AnimalService;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -23,78 +21,78 @@ import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-public class AddAnimal {
+public class EditAnimal {
     private final SceneManager sceneManager;
     private final AnimalService animalService;
+    private final Animal animal;
     private final Desktop desktop = Desktop.getDesktop();
 
-    public AddAnimal(SceneManager sceneManager, AnimalService animalService) {
+    public EditAnimal(SceneManager sceneManager, AnimalService animalService, Animal animal) {
         this.sceneManager = sceneManager;
         this.animalService = animalService;
+        this.animal = animal;
     }
 
     public Parent start(){
         //Skapar och placerar nodes
         Label titleLabel = new Label("Lägg till nytt djur");
-        Label typeLabel = new Label("Välj typ av djur");
-        ComboBox<String> typeComboBox = new ComboBox<>(FXCollections.observableArrayList(Animal.getAllAnimalTypes()));
         Label nameLabel = new Label("Namn");
-        TextField nameField = new TextField();
+        TextField nameField = new TextField(animal.getName());
         Label descriptionLabel = new Label("Beskrivning");
-        TextArea descriptionField = new TextArea();
+        TextArea descriptionField = new TextArea(animal.getDescription());
         descriptionField.setWrapText(true);
-        descriptionField.setPrefWidth(500-40*2);
+        descriptionField.setPrefWidth(220);
         Label colorLabel = new Label("Färg");
-        TextField colorField = new TextField();
+        TextField colorField = new TextField(animal.getColor());
 
         Button toListButton = new Button("Se alla djur");
 
-        //Lägg till bild
+        //Lägg till bild, öppnar utforskaren (för Windows)
         Button addImageButton = new Button("Lägg till bild");
-        Label choosenImageLabel = new Label("Ingen bild vald");
+        Label choosenImageLabel = new Label(animal.getImageFileLocation() == null ? "Ingen bild vald" : animal.getImageFileLocation());
         AtomicReference<String> imageFileLocation = new AtomicReference<>("");
 
+
         addImageButton.setOnAction(e -> {
-                    File file = ImageGetter.chooseImage(addImageButton);
-                    if (file != null) {
-                        imageFileLocation.set(file.getAbsolutePath());
-                        choosenImageLabel.setText(imageFileLocation.get());
-                    }
+            File file = ImageGetter.chooseImage(addImageButton);
+            if (file != null) {
+                imageFileLocation.set(file.getAbsolutePath());
+                choosenImageLabel.setText(imageFileLocation.get());
+            }
         });
 
-        VBox typeBox = new VBox(typeLabel, typeComboBox);
         VBox nameBox = new VBox(nameLabel, nameField);
-        VBox ColorBox = new VBox(colorLabel, colorField);
-        VBox addImageBox = new VBox(addImageButton, choosenImageLabel);
+        VBox colorBox = new VBox(colorLabel, colorField);
+        VBox imageBox = new VBox(addImageButton, choosenImageLabel);
         VBox descriptionBox = new VBox(descriptionLabel, descriptionField);
 
         //Fågel
         Label flyingLabel = new Label("kan fågeln flyga?");
         CheckBox flyingCheckBox = new CheckBox("Ja");
-        Button addBirdButton = new Button("Lägg till fågel");
+        Button saveBirdButton = new Button("Spara fågel");
         VBox birdBox = new VBox(flyingLabel, flyingCheckBox);
 
         //Katt
         Label exoticLabel = new Label("Är katten exotisk, så som lejon eller vildkatt?");
         CheckBox exoticCheckBox = new CheckBox("Ja");
-        Button addCatButton = new Button("Lägg till katt");
+        Button saveCatButton = new Button("Spara katt");
         VBox catBox = new VBox(exoticLabel, exoticCheckBox);
 
         //Hund
         Label raceLabel = new Label("Hundras");
         TextField raceField = new TextField();
-        Button addDogButton = new Button("Lägg till hund");
+        Button saveDogButton = new Button("Spara hund");
         VBox dogBox = new VBox(raceLabel, raceField);
 
         //Häst
         Label ponyLabel = new Label("Är hästen en ponny?");
         CheckBox ponyCheckBox = new CheckBox("Ja");
-        Button addHorseButton = new Button("Lägg till häst");
+        Button saveHorseButton = new Button("Spara häst");
         VBox horseBox = new VBox(ponyLabel, ponyCheckBox);
 
         VBox animalTypeBox = new VBox(10);
 
-        VBox formBox = new VBox(10, typeBox, nameBox, ColorBox, addImageBox, descriptionBox, animalTypeBox, toListButton);
+        VBox formBox = new VBox(10, nameBox, colorBox, imageBox, descriptionBox, animalTypeBox, toListButton);
         formBox.setAlignment(Pos.CENTER_RIGHT);
 
         BorderPane root = new BorderPane();
@@ -105,7 +103,7 @@ public class AddAnimal {
 
         //Funktioner till nodes
         //TODO grafisk varning
-        addBirdButton.setOnAction(e-> {
+        saveBirdButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Bird(nameField.getText(), colorField.getText(), descriptionField.getText(),
                         saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
@@ -119,10 +117,9 @@ public class AddAnimal {
             }
         });
 
-        addCatButton.setOnAction(e-> {
+        saveCatButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Cat(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         exoticCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, exoticCheckBox);
             } catch (NumberFormatException ex) {
@@ -133,10 +130,9 @@ public class AddAnimal {
             }
         });
 
-        addDogButton.setOnAction(e-> {
+        saveDogButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Dog(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         raceField.getText()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
             } catch (NumberFormatException ex) {
@@ -147,10 +143,9 @@ public class AddAnimal {
             }
         });
 
-        addHorseButton.setOnAction(e-> {
+        saveHorseButton.setOnAction(e-> {
             try {
                 animalService.addAnimal(new Horse(nameField.getText(), colorField.getText(), descriptionField.getText(),
-                        saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         ponyCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
             } catch (NumberFormatException ex) {
@@ -161,27 +156,23 @@ public class AddAnimal {
             }
         });
 
-        typeComboBox.setOnAction(e -> {
+        /*typeComboBox.setOnAction(e -> {
             switch (typeComboBox.getValue().toLowerCase()){
-                case "fågel" : animalTypeBox.getChildren().setAll(birdBox, addBirdButton);
-                break;
-                case "katt" : animalTypeBox.getChildren().setAll(catBox, addCatButton);
-                break;
-                case "hund" : animalTypeBox.getChildren().setAll(dogBox, addDogButton);
-                break;
-                case "häst" : animalTypeBox.getChildren().setAll(horseBox, addHorseButton);
-                break;
+                case "fågel" : animalTypeBox.getChildren().setAll(birdBox, saveBirdButton);
+                    break;
+                case "katt" : animalTypeBox.getChildren().setAll(catBox, saveCatButton);
+                    break;
+                case "hund" : animalTypeBox.getChildren().setAll(dogBox, saveDogButton);
+                    break;
+                case "häst" : animalTypeBox.getChildren().setAll(horseBox, saveHorseButton);
+                    break;
                 default: animalTypeBox.getChildren().clear();
             }
-        });
+        });*/
 
 
 
-        toListButton.setOnAction(e-> sceneManager.showRoot(GUIType.LIST_ANIMALS));
-
-        //TODO om en level som behöver registering så som betalning eller studentkort ska en varning komma upp, och när
-        // knapp trycks ska en popup dyka upp som man behöver hantera innan medlem skapas och läggs till.
-
+        //toListButton.setOnAction(e-> new ListAnimals(primaryStage, animalService, new RentalService()).start());
         return root;
 
     }
@@ -221,7 +212,6 @@ public class AddAnimal {
     }
 
     //TODO flytta till annan klass
-    //TODO Om det redan finns en fil, lägg på en siffra
     private String saveFileToDirectory(String absoluteFileLocation, String targetDirectory) throws IOException {
         File absoluteFile = new File(absoluteFileLocation);
         File directory = new File(targetDirectory);

@@ -9,10 +9,10 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,15 +31,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ListMembers {
-    private final Stage primaryStage;
+    private final SceneManager sceneManager;
     private final MemberService memberService;
 
-    public ListMembers(Stage primaryStage, MemberService memberService) {
-        this.primaryStage = primaryStage;
+    public ListMembers(SceneManager sceneManager, MemberService memberService) {
+        this.sceneManager = sceneManager;
         this.memberService = memberService;
     }
 
-    public void start(){
+    public Parent start(){
         Label titelLabel = new Label("Medlemmar");
         Button addMemberButton = new Button("Lägg till ny medlem");
 
@@ -178,7 +178,6 @@ public class ListMembers {
         VBox body = new VBox(20,titelLabel, filterButtonsBox, memberTable, manageMemberBox);
         HBox root = new HBox(body, overlay);
         root.setPadding(new Insets(40));
-        primaryStage.setScene(new Scene(root));
 
         //Funktioner till nodes
         //Ta bort medlemmar
@@ -232,7 +231,9 @@ public class ListMembers {
             }
         });
 
-        addMemberButton.setOnAction(e-> new AddMember(primaryStage, memberService).start());
+        addMemberButton.setOnAction(e-> sceneManager.showRoot(GUIType.ADD_MEMBER));
+
+        return root;
     }
 
     private List<Class<?extends PricePolicy>> getSelectedLevels(List<Node> nodes) {

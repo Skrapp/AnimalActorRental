@@ -1,6 +1,5 @@
 package gui;
 
-import entity.member.Member;
 import entity.member.pricepolicy.PricePolicy;
 import exceptions.PricePolicyNotFoundException;
 import javafx.collections.FXCollections;
@@ -20,15 +19,15 @@ import java.util.function.Predicate;
 
 
 public class AddMember {
-    private final Stage primaryStage;
+    private final SceneManager sceneManager;
     private final MemberService memberService;
 
-    public AddMember(Stage primaryStage, MemberService memberService) {
-        this.primaryStage = primaryStage;
+    public AddMember(SceneManager sceneManager, MemberService memberService) {
+        this.sceneManager = sceneManager;
         this.memberService = memberService;
     }
 
-    public void start(){
+    public Parent start(){
         //Skapar och placerar nodes
         Label titleLabel = new Label("Lägg till ny medlem");
         Label nameLabel = new Label("Namn");
@@ -56,8 +55,6 @@ public class AddMember {
         root.setRight(formBox);
         root.setPadding(new Insets(40));
 
-        primaryStage.setScene(new Scene(root));
-
         //Funktioner till nodes
         //TODO grafisk varning
         addMemberButton.setOnAction(e-> {
@@ -75,11 +72,12 @@ public class AddMember {
                 System.out.println(ex);
             }
         });
-        toListButton.setOnAction(e-> new ListMembers(primaryStage, memberService).start());
+        toListButton.setOnAction(e-> sceneManager.showRoot(GUIType.LIST_MEMBERS));
 
         //TODO om en level som behöver registering så som betalning eller studentkort ska en varning komma upp, och när
         // knapp trycks ska en popup dyka upp som man behöver hantera innan medlem skapas och läggs till.
 
+        return root;
 
     }
 

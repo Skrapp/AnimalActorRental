@@ -2,27 +2,27 @@ package gui;
 
 import entity.animals.Animal;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import service.AnimalService;
 import service.RentalService;
 
 import java.io.IOException;
 
 public class ListAnimals {
-    private Stage primaryStage;
+    private SceneManager sceneManager;
     private AnimalService animalService;
     private RentalService rentalService;
 
-    public ListAnimals(Stage primaryStage, AnimalService animalService, RentalService rentalService) {
-        this.primaryStage = primaryStage;
+    public ListAnimals(SceneManager sceneManager, AnimalService animalService, RentalService rentalService) {
+        this.sceneManager = sceneManager;
         this.animalService = animalService;
         this.rentalService = rentalService;
     }
 
-    public void start(){
+    public Parent start(){
         VBox listingBox = new VBox(20);
         listingBox.setPadding(new Insets(20));
         ScrollPane scrollPane = new ScrollPane(listingBox);
@@ -30,7 +30,7 @@ public class ListAnimals {
             for(Animal animal : animalService.getAllAnimals()){
                 System.out.println(animal);
 
-                AnimalListing animalListing = new AnimalListing(animal);
+                AnimalListing animalListing = new AnimalListing(sceneManager, animal);
                 listingBox.getChildren().add(animalListing.getListing());
             }
         } catch (IOException e) {
@@ -38,7 +38,6 @@ public class ListAnimals {
         }
 
         VBox root = new VBox(scrollPane);
-        root.maxWidth(primaryStage.getWidth());
-        primaryStage.setScene(new Scene(root));
+        return root;
     }
 }

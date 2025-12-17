@@ -103,7 +103,8 @@ public class EditAnimal {
                 VBox horseBox = new VBox(ponyLabel, ponyCheckBox);
                 formBox.getChildren().addAll(horseBox);
                 break;
-            default: throw new IllegalArgumentException("Är inte av typen Animal: " + animal.getAnimalType().getSwedish());
+            default: new Alert(Alert.AlertType.ERROR, "Är inte av en giltig djurtyp: " + animal.getAnimalType().getSwedish() ).showAndWait();
+                throw new IllegalArgumentException("Är inte av typen Animal: " + animal.getAnimalType().getSwedish());
         }
         Button saveButton = new Button("Uppdatera");
         saveButton.setOnAction(e-> updateAnimal());
@@ -163,14 +164,15 @@ public class EditAnimal {
                     }
                     break;
                 default:
+                    new Alert(Alert.AlertType.ERROR, "\"" + animal.getAnimalType().getSwedish() + "\" är inte av giltig djurtyp.").showAndWait();
                     throw new IllegalArgumentException(animal.getAnimalType().getSwedish() + " är inte av typen Animal.");
             }
 
             animalService.updateAnimal(animal);
         } catch (AnimalNotFoundException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Djuret finns inte bland filer. ID: " + animal.getId() + ". " + e.getMessage()).showAndWait();
         } catch (IOException e){
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + e.getMessage()).showAndWait();
         }
     }
 

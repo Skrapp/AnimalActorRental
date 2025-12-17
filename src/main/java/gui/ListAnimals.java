@@ -100,6 +100,7 @@ public class ListAnimals {
                     categoryLabel2.setText(type.getSwedish());
                     chosenType.set(type);
                 } catch (IOException ex) {
+                    new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                     throw new RuntimeException(ex);
                 }
             });
@@ -109,6 +110,7 @@ public class ListAnimals {
         try {
             fillList(animalService.getAllAnimals());
         } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + e.getMessage()).showAndWait();
             throw new RuntimeException(e);
         }
 
@@ -153,8 +155,10 @@ public class ListAnimals {
             animalService.removeAnimal(animal);
             animalListing.getChildren().setAll(new Label(animal.getName() + " är borttagen"));
         } catch (AnimalNotFoundException ex) {
+            new Alert(Alert.AlertType.ERROR, "Djuret finns inte. ID: " + animal.getId() + ". " + ex.getMessage()).showAndWait();
             throw new RuntimeException(ex);
         } catch (IOException ex) {
+            new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
             throw new RuntimeException(ex);
         }
     }

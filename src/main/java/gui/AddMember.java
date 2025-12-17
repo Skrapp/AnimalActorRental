@@ -64,11 +64,11 @@ public class AddMember {
                     cleanFields(nameField, productionsField,levelComboBox);
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("\"" + productionsField.getText() + "\" är inte en giltig siffra.");
+                new Alert(Alert.AlertType.ERROR, "\"" + productionsField.getText() + "\" är inte en giltig siffra." + ex.getMessage()).showAndWait();
             } catch (PricePolicyNotFoundException ex){
-                System.out.println("\"" + levelComboBox.getValue() + "\" är inte en giltig level.");
+                new Alert(Alert.AlertType.ERROR, "\"" + levelComboBox.getValue() + "\" är inte en giltig level." + ex.getMessage()).showAndWait();
             } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 System.out.println(ex);
             }
         });

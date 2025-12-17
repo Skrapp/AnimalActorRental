@@ -96,10 +96,13 @@ public class ListRentals {
                 returnedAlert.showAndWait();
                 sceneManager.showRoot(GUIType.LIST_RENTALS, member);
             } catch (IOException ex) {
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             } catch (MemberNotFoundException ex) {
+                new Alert(Alert.AlertType.ERROR, "Medlemmen finns inte. ID: " + member.getId() + ". " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             } catch (AnimalNotFoundException ex) {
+                new Alert(Alert.AlertType.ERROR, "Djur går inte att få tag på. " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             }
         });

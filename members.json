@@ -1,12 +1,4 @@
 [ {
-  "id" : "M17",
-  "name" : "Linus",
-  "level" : {
-    "type" : "Regular"
-  },
-  "rentalHistory" : [ ],
-  "productions" : 1
-}, {
   "id" : "M16",
   "name" : "Sara",
   "level" : {
@@ -102,4 +94,29 @@
     "returned" : true
   } ],
   "productions" : 4
+}, {
+  "id" : "M17",
+  "name" : "Linus",
+  "level" : {
+    "type" : "Regular"
+  },
+  "rentalHistory" : [ {
+    "animal" : {
+      "animalType" : "CAT",
+      "id" : "A63",
+      "name" : "Bilbo",
+      "color" : "Svart",
+      "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
+      "imageFileLocation" : null,
+      "animalType" : "CAT",
+      "available" : false,
+      "price" : 2000.0,
+      "exotic" : false
+    },
+    "dateFrom" : "2025-12-18",
+    "dateTo" : "2025-12-20",
+    "price" : 4000.0,
+    "returned" : false
+  } ],
+  "productions" : 1
 } ]

@@ -45,6 +45,7 @@ public class ListMembers {
 
     public Parent start(){
         Label titelLabel = new Label("Medlemmar");
+        Label infomationLabel = new Label("Dubbelklicka på ett fält för att redigera");
         Button addMemberButton = new Button("Lägg till ny medlem");
 
         //Sökfält
@@ -190,7 +191,7 @@ public class ListMembers {
         filterButtonsBox.setAlignment(Pos.CENTER_RIGHT);
         HBox manageMemberBox = new HBox(20, removeMembersButton, addMemberButton);
         manageMemberBox.setAlignment(Pos.CENTER_RIGHT);
-        VBox body = new VBox(20,titelLabel, filterButtonsBox, memberTable, manageMemberBox);
+        VBox body = new VBox(20,titelLabel, infomationLabel, filterButtonsBox, memberTable, manageMemberBox);
         HBox root = new HBox(body, overlay);
         root.setPadding(new Insets(40));
 
@@ -214,8 +215,10 @@ public class ListMembers {
                 memberTable.setItems(searchAndFilter(searchField.getText(), getSelectedLevels(levelsCheckBox.getChildren()),
                         Integer.parseInt(minProductionsField.getText()), Integer.parseInt(maxProductionsField.getText())));
             } catch (IOException ex) {
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             } catch (MemberNotFoundException ex) {
+                new Alert(Alert.AlertType.ERROR, "Medlemmen finns inte. ID: " + membersToRemove.get(0).getId() + ". " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             }
 
@@ -229,6 +232,7 @@ public class ListMembers {
                         Integer.parseInt(maxProductionsField.getText())));
                 sortTable(memberTable, idColumn);
             } catch (IOException ex) {
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             }
         });
@@ -242,6 +246,7 @@ public class ListMembers {
                             Integer.parseInt(minProductionsField.getText()), Integer.parseInt(maxProductionsField.getText())));
                 sortTable(memberTable, idColumn);
             } catch (IOException ex) {
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 throw new RuntimeException(ex);
             }
         });

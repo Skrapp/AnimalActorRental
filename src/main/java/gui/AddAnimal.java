@@ -121,10 +121,8 @@ public class AddAnimal {
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         Double.parseDouble(priceField.getText()), flyingCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, flyingCheckBox);
-            } catch (NumberFormatException ex) {
-                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
             } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 System.out.println(ex);
             }
         });
@@ -135,10 +133,8 @@ public class AddAnimal {
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         Double.parseDouble(priceField.getText()), exoticCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, exoticCheckBox);
-            } catch (NumberFormatException ex) {
-                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
-            } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
+            }  catch (IOException ex){
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 System.out.println(ex);
             }
         });
@@ -149,10 +145,8 @@ public class AddAnimal {
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         Double.parseDouble(priceField.getText()), raceField.getText()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
-            } catch (NumberFormatException ex) {
-                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
             } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 System.out.println(ex);
             }
         });
@@ -163,10 +157,8 @@ public class AddAnimal {
                         ImageManager.saveFileToDirectory(imageFileLocation.get(), "media" + File.separator + "animals"),
                         Double.parseDouble(priceField.getText()), ponyCheckBox.isSelected()));
                 cleanFields(nameField, colorField, descriptionField, raceField);
-            } catch (NumberFormatException ex) {
-                System.out.println("\"" + colorField.getText() + "\" är inte en giltig siffra.");
             } catch (IOException ex){
-                System.out.println("Blev fel i filhantering.");
+                new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + ex.getMessage()).showAndWait();
                 System.out.println(ex);
             }
         });
@@ -185,15 +177,12 @@ public class AddAnimal {
             }
         });
 
-
-
         toListButton.setOnAction(e-> sceneManager.showRoot(GUIType.LIST_ANIMALS));
 
         //TODO om en level som behöver registering så som betalning eller studentkort ska en varning komma upp, och när
         // knapp trycks ska en popup dyka upp som man behöver hantera innan medlem skapas och läggs till.
 
         return root;
-
     }
 
     /**TODO Lägg till på alla fält

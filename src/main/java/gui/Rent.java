@@ -121,6 +121,10 @@ public class Rent {
     }
 
     private void rent() {
+        if(memberToRent == null){
+            new Alert(Alert.AlertType.INFORMATION, "Ingen medlem vald").showAndWait();
+            return;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Ta emot betalning på " + getPrice() + " av hyra av " + animalToRent.getName() + "."
         );
@@ -137,11 +141,15 @@ public class Rent {
                     );
                     rentalService.receivePayment(getPrice());
                     System.out.println(memberToRent);
+                    sceneManager.showRoot(GUIType.LIST_ANIMALS);
                 } catch (IOException e) {
+                    new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + e.getMessage()).showAndWait();
                     throw new RuntimeException(e);
                 } catch (MemberNotFoundException e) {
+                    new Alert(Alert.AlertType.ERROR, "Medlemmen finns inte. ID: " + memberToRent.getId() + ". " + e.getMessage()).showAndWait();
                     throw new RuntimeException(e);
                 } catch (AnimalNotFoundException e){
+                    new Alert(Alert.AlertType.ERROR, "Djur finns inte. ID: " + animalToRent.getId() + ". " + e.getMessage()).showAndWait();
                     throw new RuntimeException(e);
                 }
             }
@@ -182,6 +190,7 @@ public class Rent {
             memberToRent = memberService.getMemberByID(memberIDField.getText());
             return memberToRent;
         } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "Blev fel i filhantering. " + e.getMessage()).showAndWait();
             throw new RuntimeException(e);
         } catch (MemberNotFoundException e) {
             memberInfoBox.getChildren().setAll(new Label("Finns ingen medlem med valt medlemsID"));

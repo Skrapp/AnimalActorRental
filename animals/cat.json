@@ -15,7 +15,7 @@
   "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
   "imageFileLocation" : null,
   "animalType" : "CAT",
-  "available" : true,
+  "available" : false,
   "price" : 2000.0,
   "exotic" : false
 } ]

@@ -4,7 +4,6 @@ import entity.animals.Animal;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import service.AnimalService;
 import service.MemberService;

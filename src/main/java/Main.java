@@ -1,4 +1,6 @@
+import dao.Rental;
 import gui.AddAnimal;
+import gui.AnimalListing;
 import gui.GUIType;
 import gui.SceneManager;
 import javafx.application.Application;
@@ -74,8 +76,11 @@ public class Main extends Application {
         primaryStage.setWidth(1000);
         primaryStage.setHeight(700);
         primaryStage.show();
+        MemberService memberService = new MemberService();
+        AnimalService animalService = new AnimalService();
+        RentalService rentalService = new RentalService(memberService, animalService);
 
-        SceneManager sceneManager = new SceneManager(primaryStage, new MemberService(), new AnimalService(), new RentalService());
+        SceneManager sceneManager = new SceneManager(primaryStage, memberService, animalService, rentalService);
         sceneManager.showRoot(GUIType.ADD_ANIMAL);
     }
 }

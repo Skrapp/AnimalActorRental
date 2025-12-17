@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ListAnimals {
@@ -71,6 +72,7 @@ public class ListAnimals {
                 }
         );
 
+        //Filtering av djurtyp
         HBox filterButtonBox = new HBox(10);
         Button allTypesButton = new Button("Alla");
         allTypesButton.setDisable(true);
@@ -123,7 +125,7 @@ public class ListAnimals {
         }
     }
 
-    private void fillList(List<Animal> animals) {
+    private void fillList(Set<Animal> animals) {
         listingBox.getChildren().clear();
         for(Animal animal : animals){
             System.out.println(animal);
@@ -137,6 +139,8 @@ public class ListAnimals {
             removeButton.setOnAction(e -> removeAnimal(animal, animalListing));
 
             rentButton.setOnAction(e -> sceneManager.showRoot(GUIType.RENT, animal));
+
+            rentButton.setDisable(!animal.isAvailable());
 
             VBox buttonBox = new VBox(20, rentButton, editButton, removeButton);
             animalListing.getChildren().add(buttonBox);

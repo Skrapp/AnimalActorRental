@@ -16,18 +16,18 @@
   "rentalHistory" : [ {
     "animal" : {
       "animalType" : "HORSE",
-      "id" : "A66",
-      "name" : "Dennis",
-      "color" : "Sand",
-      "description" : "En ponny som älskar att bli klappad och mysa. Van med barn och andra djur.",
+      "id" : "A64",
+      "name" : "Boris",
+      "color" : "Vit",
+      "description" : "Tidigare cirkushäst, van med många trick och mycket folk. Försök inte rida på Boris, det tycker hon inte om.",
       "imageFileLocation" : null,
       "animalType" : "HORSE",
-      "available" : true,
+      "available" : false,
       "price" : 2000.0,
-      "pony" : true
+      "pony" : false
     },
     "dateFrom" : "2025-12-17",
-    "dateTo" : "2025-12-17",
+    "dateTo" : "2025-12-19",
     "price" : 3200.0,
     "returned" : false
   } ],

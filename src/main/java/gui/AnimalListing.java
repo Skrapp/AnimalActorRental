@@ -25,8 +25,6 @@ public class AnimalListing {
         HBox listingBox = new HBox(20);
         listingBox.setMinWidth(250);
         ImageView image = null;
-
-
         //Sätter en bild, om bild inte finns i mappen eller det inte är någon bild kopplad till Animal används en placeholder
         try {
             image = new ImageView(new Image(new FileInputStream(animal.getImageFileLocation())));

@@ -2,6 +2,7 @@ package gui;
 
 import entity.animals.Animal;
 import entity.member.Member;
+import exceptions.AnimalNotFoundException;
 import exceptions.MemberNotFoundException;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -111,6 +112,7 @@ public class Rent {
 
         cancelButton.setOnAction(e->sceneManager.showRoot(GUIType.LIST_ANIMALS));
 
+        //gör diable om inte allt är ifyllt
         rentButton.setOnAction(e->rent());
 
         VBox root = new VBox(20, searchMemberBox, memberInfoBox, animalListing, priceBox, dateBox, decisionBox);
@@ -119,30 +121,29 @@ public class Rent {
     }
 
     private void rent() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Ta emot betalning av hyra.");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Ta emot betalning på " + getPrice() + " av hyra av " + animalToRent.getName() + ".");
         alert.setTitle("Betalning");
         alert.setHeaderText("Betalning");
-        ButtonType buttonType = alert.showAndWait().get();
-        if(buttonType.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)){
-            try {
-                memberService.updateMember(rentalService.rentAnimal(
-                        memberToRent, animalToRent,
-                        datePickerFrom.getValue(), datePickerTo.getValue(),
-                        getPrice())
-                );
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (MemberNotFoundException e) {
-                throw new RuntimeException(e);
+        //Om användaren stänger fönstret med x knappen så stoppar ifPresent m
+        alert.showAndWait().ifPresent(buttonPressed -> {
+            if (buttonPressed == ButtonType.OK) {
+                try {
+                    rentalService.rentAnimal(
+                            memberToRent, animalToRent,
+                            datePickerFrom.getValue(), datePickerTo.getValue(),
+                            getPrice()
+                    );
+                    rentalService.receivePayment(getPrice());
+                    System.out.println(memberToRent);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (MemberNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (AnimalNotFoundException e){
+                    throw new RuntimeException(e);
+                }
             }
-            try {
-                System.out.println(memberService.getMemberByID(memberToRent.getId()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (MemberNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        });
     }
 
     private void updateMember() {

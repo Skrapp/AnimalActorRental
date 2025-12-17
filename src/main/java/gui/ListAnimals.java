@@ -111,7 +111,7 @@ public class ListAnimals {
         }
 
         VBox root = new VBox(20, filterBox, scrollPane);
-        root.setPadding(new Insets(40));
+        root.setPadding(new Insets(40, 20, 0, 20));
         return root;
     }
 

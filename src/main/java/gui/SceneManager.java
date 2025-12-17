@@ -3,6 +3,8 @@ package gui;
 import entity.animals.Animal;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import service.AnimalService;
 import service.MemberService;
@@ -10,12 +12,14 @@ import service.RentalService;
 
 public class SceneManager {
     private Stage primaryStage;
+    private Parent menu;
     private MemberService memberService;
     private AnimalService animalService;
     private RentalService rentalService;
 
     public SceneManager(Stage primaryStage, MemberService memberService, AnimalService animalService, RentalService rentalService) {
         this.primaryStage = primaryStage;
+        this.menu = new Menu(this).start();
         this.memberService = memberService;
         this.animalService = animalService;
         this.rentalService = rentalService;
@@ -34,7 +38,7 @@ public class SceneManager {
                 break;
             default: throw new NullPointerException("Denna GUIType finns inte: " + guiType.name());
         }
-        primaryStage.setScene(new Scene(root));
+        setRootAndMenu(root);
     }
 
     public void showRoot(GUIType guiType, Object requiredData){
@@ -58,6 +62,13 @@ public class SceneManager {
             break;
             default: throw new NullPointerException("Denna GUIType finns inte: " + guiType.name());
         }
-        primaryStage.setScene(new Scene(root));
+        setRootAndMenu(root);
+    }
+
+    private void setRootAndMenu(Parent root) {
+        BorderPane rootAndMenu = new BorderPane();
+        rootAndMenu.setCenter(root);
+        rootAndMenu.setBottom(menu);
+        primaryStage.setScene(new Scene(rootAndMenu));
     }
 }

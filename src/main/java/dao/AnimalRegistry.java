@@ -57,6 +57,24 @@ public class AnimalRegistry {
         return true;
     }
 
+    /**
+     * Uppdaterar medlemmen genom att i listan ta bort det djur som är kopplad till djurets ID, och lägger sedan
+     * till det uppdaterade djuret till listan som sedan skickas vidare för att uppdatera filen.
+     * @param animal
+     * @throws AnimalNotFoundException
+     * @throws IOException
+     */
+    public void updateAnimal(Animal animal) throws AnimalNotFoundException, IOException {
+        File animalFile = new File(directory.concat(File.separator).concat(animal.getAnimalType().name().toLowerCase()).concat(".json"));
+        List<Animal> animals = getAnimals(animalFile);
+        //Om det inte finns någon djur med givet id så kan det inte tas bort, därav är det troligtvis fel någonstans
+        if (!animals.removeIf(a -> a.getId().equals(animal.getId()))) {
+            throw new AnimalNotFoundException("Djur med id \"" + animal.getId() + "\" finns inte i djurregister.");
+        }
+        animals.add(animal);
+        reloadFile(animalFile, animals);
+    }
+
     public List<Animal> getAllAnimals() throws IOException {
         List <Animal> animals = new ArrayList<>();
         for(String fileName : fileNames){
@@ -74,10 +92,12 @@ public class AnimalRegistry {
     }
 
     public void reloadFile(File animalFile, List<? extends Animal> animals) throws IOException{
+        List<Animal> oldList = getAnimals(animalFile);
         try {
             mapper.writeValue(animalFile, animals);
         } catch (IOException e) {
-            throw new IOException("Kan inte läsa fil.\n" + e);
+            mapper.writeValue(animalFile,oldList);
+            throw new IOException(e);
         }
     }
 

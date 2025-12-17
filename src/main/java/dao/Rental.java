@@ -10,6 +10,7 @@ public class Rental {
     private LocalDate dateFrom;
     private LocalDate dateTo;
     private double price;
+    private boolean returned;
 
     public Rental() {
     }
@@ -19,6 +20,7 @@ public class Rental {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.price = price;
+        this.returned = false;
     }
 
     public Animal getAnimal() {
@@ -43,5 +45,32 @@ public class Rental {
 
     public void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isReturned() {
+        return returned;
+    }
+
+    public void setReturned(boolean returned) {
+        this.returned = returned;
+    }
+
+    @Override
+    public String toString() {
+        return "Rental{" +
+                "animal=" + animal +
+                ", dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", price=" + price +
+                ", returned=" + returned +
+                '}';
     }
 }

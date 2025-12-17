@@ -1,23 +1,4 @@
 [ {
-  "id" : "M16",
-  "name" : "Sara",
-  "level" : {
-    "type" : "Student",
-    "priceReduction" : 400.0
-  },
-  "rentalHistory" : [ ],
-  "productions" : 20
-}, {
-  "id" : "M40",
-  "name" : "zxfg",
-  "level" : {
-    "type" : "Golden",
-    "procentReduction" : 0.7,
-    "fee" : 3000.0
-  },
-  "rentalHistory" : [ ],
-  "productions" : 6
-}, {
   "id" : "M17",
   "name" : "Linus",
   "level" : {
@@ -26,8 +7,8 @@
   "rentalHistory" : [ ],
   "productions" : 1
 }, {
-  "id" : "M18",
-  "name" : "Gustaf",
+  "id" : "M16",
+  "name" : "Sara",
   "level" : {
     "type" : "Student",
     "priceReduction" : 400.0
@@ -45,4 +26,10 @@
       "price" : 2000.0,
       "pony" : true
     },
-    "dateFrom"
+    "dateFrom" : "2025-12-17",
+    "dateTo" : "2025-12-17",
+    "price" : 3200.0,
+    "returned" : false
+  } ],
+  "productions" : 20
+} ]

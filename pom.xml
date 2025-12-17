@@ -25,6 +25,11 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.19.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.0</version> <!-- Eller matchande version med din jackson-databind -->
+        </dependency>
     </dependencies>
 
 </project>

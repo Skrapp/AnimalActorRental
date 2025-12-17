@@ -27,8 +27,7 @@ public class AnimalService {
     }
 
     public void updateAnimal(Animal animal) throws IOException, AnimalNotFoundException {
-        removeAnimal(animal);
-        addAnimal(animal);
+        animalRegistry.updateAnimal(animal);
     }
 
     public Animal getAnimalByID(String id) throws IOException, AnimalNotFoundException {
@@ -47,7 +46,6 @@ public class AnimalService {
 
     /**
      * Filtrerar och sorterar djur från fil.
-     *
      * @param searchWord filtrerar enligt sökord på id, namn, färg eller beskrivning
      * @param animalType djurtyp att filtrera. Använd null för att filtrera från alla djur.
      * @return returnerar set med medlemmar

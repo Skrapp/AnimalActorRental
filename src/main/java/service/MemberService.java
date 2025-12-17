@@ -9,7 +9,6 @@ import exceptions.PricePolicyNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MemberService {
     private MemberRegistry memberRegistry = new MemberRegistry("members.json");
@@ -29,7 +28,7 @@ public class MemberService {
     public void removeMember(Member memberToRemove) throws IOException, MemberNotFoundException {
         List<String> membersId = new ArrayList<>();
         membersId.add(memberToRemove.getId());
-        memberRegistry.removeMemberByID(membersId);
+        memberRegistry.removeMembersByID(membersId);
     }
 
     public void removeMembers(List<Member> members) throws IOException, MemberNotFoundException {
@@ -37,12 +36,11 @@ public class MemberService {
                 members.stream()
                         .map(Member::getId)
                         .collect(Collectors.toList());
-        memberRegistry.removeMemberByID(membersId);
+        memberRegistry.removeMembersByID(membersId);
     }
 
     public void updateMember(Member member) throws IOException, MemberNotFoundException {
-        removeMember(member);
-        addMember(member);
+        memberRegistry.updateMember(member);
     }
 
     public Member getMemberByID(String id) throws IOException, MemberNotFoundException {

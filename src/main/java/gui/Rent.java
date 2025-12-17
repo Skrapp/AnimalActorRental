@@ -50,7 +50,7 @@ public class Rent {
 
         findMemberButton.setOnAction(e -> updateMember());
 
-        listMembersButton.setOnAction(e -> sceneManager.showRoot(GUIType.LIST_ANIMALS));
+        listMembersButton.setOnAction(e -> sceneManager.showRoot(GUIType.LIST_MEMBERS));
 
         Label noMemberLabel = new Label("Ingen medlem vald, skriv in medlemsID ovan");
         memberInfoBox = new HBox(10,noMemberLabel);
@@ -121,10 +121,12 @@ public class Rent {
     }
 
     private void rent() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Ta emot betalning på " + getPrice() + " av hyra av " + animalToRent.getName() + ".");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Ta emot betalning på " + getPrice() + " av hyra av " + animalToRent.getName() + "."
+        );
         alert.setTitle("Betalning");
         alert.setHeaderText("Betalning");
-        //Om användaren stänger fönstret med x knappen så stoppar ifPresent m
+        //Om användaren stänger fönstret med x knappen så stoppar ifPresent så kodblocket inte körs
         alert.showAndWait().ifPresent(buttonPressed -> {
             if (buttonPressed == ButtonType.OK) {
                 try {

@@ -8,6 +8,7 @@ import exceptions.MemberNotFoundException;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RentalService {
@@ -20,6 +21,13 @@ public class RentalService {
     }
 
     public RentalService(MemberService memberService, AnimalService animalService) {
+        this();
+        this.memberService = memberService;
+        this.animalService = animalService;
+    }
+
+    public RentalService(double income, MemberService memberService, AnimalService animalService) {
+        this.income = income;
         this.memberService = memberService;
         this.animalService = animalService;
     }
@@ -35,6 +43,22 @@ public class RentalService {
         member.setRentalHistory(rentals);
         memberService.updateMember(member);
         animalService.updateAnimal(animal);
+    }
+
+    public List<Animal> returnAnimals(Member member, List<Rental> rentalsToReturn) throws AnimalNotFoundException, IOException, MemberNotFoundException {
+        List<Animal> animalsReturned = new ArrayList<>();
+        for(Rental rental : rentalsToReturn){
+            if(rental.isReturned()){
+                continue;
+            }
+            Animal animal = rental.getAnimal();
+            rental.setReturned(true);
+            animal.setAvailable(true);
+            animalService.updateAnimal(animal);
+            animalsReturned.add(animal);
+        }
+        memberService.updateMember(member);
+        return animalsReturned;
     }
 
     public double receivePayment(double amount){

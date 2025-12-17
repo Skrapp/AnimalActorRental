@@ -25,7 +25,7 @@
   "description" : "Tidigare cirkushäst, van med många trick och mycket folk. Försök inte rida på Boris, det tycker hon inte om.",
   "imageFileLocation" : null,
   "animalType" : "HORSE",
-  "available" : false,
+  "available" : true,
   "price" : 2000.0,
   "pony" : false
 } ]

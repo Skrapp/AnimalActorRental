@@ -4,6 +4,10 @@ import entity.member.Member;
 import entity.member.pricepolicy.PricePolicy;
 import exceptions.MemberNotFoundException;
 import exceptions.PricePolicyNotFoundException;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -111,7 +115,18 @@ public class ListMembers {
                 throw new RuntimeException(ex);
             }
         });
-        memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, productionsColumn);
+        TableColumn<Member, String> rentalsColumn = new TableColumn<>("Aktiva uthyrningar");
+        rentalsColumn.setCellValueFactory(c
+                -> new SimpleStringProperty(c.getValue().getRentalHistory().size() + " uthyrningar")
+        );
+
+        TableColumn<Member, Button> listRentalsColumn = new TableColumn<>();
+        listRentalsColumn.setCellValueFactory(c ->
+                new ReadOnlyObjectWrapper<>(manageRentalButton(c.getValue()))
+        );
+
+        memberTable.getColumns().addAll(idColumn, nameColumn, levelColumn, productionsColumn, rentalsColumn, listRentalsColumn);
+
         //Ta bort medlemmar
         Button removeMembersButton = new Button("Ta bort markerade medlemmar");
         try{
@@ -234,6 +249,14 @@ public class ListMembers {
         addMemberButton.setOnAction(e-> sceneManager.showRoot(GUIType.ADD_MEMBER));
 
         return root;
+    }
+
+    private Button manageRentalButton(Member member) {
+        Button button = new Button("hantera uthyrningar");
+        button.setOnAction(e
+                -> sceneManager.showRoot(GUIType.LIST_RENTALS, member)
+        );
+        return button;
     }
 
     private List<Class<?extends PricePolicy>> getSelectedLevels(List<Node> nodes) {

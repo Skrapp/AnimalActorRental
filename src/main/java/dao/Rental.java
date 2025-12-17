@@ -1,7 +1,6 @@
 package dao;
 
 import entity.animals.Animal;
-import entity.member.Member;
 
 import java.time.LocalDate;
 

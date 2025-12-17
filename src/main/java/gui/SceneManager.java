@@ -1,6 +1,7 @@
 package gui;
 
 import entity.animals.Animal;
+import entity.member.Member;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -45,7 +46,9 @@ public class SceneManager {
         switch (guiType){
             case EDIT_ANIMAL:
                 if(requiredData instanceof Animal){
-                    root = new EditAnimal(this, animalService, (Animal) requiredData).start();
+                    root = new EditAnimal(this,
+                            animalService,
+                            (Animal) requiredData).start();
                 }else {
                     throw new IllegalArgumentException("Data är inte av typen Animal: " + requiredData);
                 }
@@ -57,6 +60,15 @@ public class SceneManager {
                             (Animal) requiredData).start();
                 }else {
                     throw new IllegalArgumentException("Data är inte av typen Animal: " + requiredData);
+                }
+            break;
+            case LIST_RENTALS:
+                if(requiredData instanceof Member){
+                    root = new ListRentals(this,
+                            rentalService,
+                            (Member) requiredData).start();
+                }else {
+                    throw new IllegalArgumentException("Data är inte av typen Member: " + requiredData);
                 }
             break;
             default: throw new NullPointerException("Denna GUIType finns inte: " + guiType.name());

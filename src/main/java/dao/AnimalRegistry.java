@@ -25,7 +25,6 @@ public class AnimalRegistry {
     public AnimalRegistry(String directory) {
         this.directory = directory;
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        fileNames = getCurrentFileNames();
     }
 
     private Set<String> getCurrentFileNames() {
@@ -77,7 +76,7 @@ public class AnimalRegistry {
 
     public List<Animal> getAllAnimals() throws IOException {
         List <Animal> animals = new ArrayList<>();
-        for(String fileName : fileNames){
+        for(String fileName : getCurrentFileNames()){
             animals.addAll(getAnimals(new File(directory.concat(File.separator).concat(fileName))));
         }
         return animals;

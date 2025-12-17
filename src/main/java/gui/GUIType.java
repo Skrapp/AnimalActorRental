@@ -6,5 +6,6 @@ public enum GUIType {
     LIST_ANIMALS,
     LIST_MEMBERS,
     EDIT_ANIMAL,
-    RENT
+    RENT,
+    LIST_RENTALS
 }

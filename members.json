@@ -22,14 +22,84 @@
       "description" : "Tidigare cirkushäst, van med många trick och mycket folk. Försök inte rida på Boris, det tycker hon inte om.",
       "imageFileLocation" : null,
       "animalType" : "HORSE",
-      "available" : false,
+      "available" : true,
       "price" : 2000.0,
       "pony" : false
     },
     "dateFrom" : "2025-12-17",
     "dateTo" : "2025-12-19",
     "price" : 3200.0,
-    "returned" : false
+    "returned" : true
   } ],
   "productions" : 20
+}, {
+  "id" : "M75",
+  "name" : "Frida",
+  "level" : {
+    "type" : "Student",
+    "priceReduction" : 400.0
+  },
+  "rentalHistory" : [ {
+    "animal" : {
+      "animalType" : "CAT",
+      "id" : "A63",
+      "name" : "Bilbo",
+      "color" : "Svart",
+      "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
+      "imageFileLocation" : null,
+      "animalType" : "CAT",
+      "available" : true,
+      "price" : 2000.0,
+      "exotic" : false
+    },
+    "dateFrom" : "2025-12-17",
+    "dateTo" : "2025-12-26",
+    "price" : 14400.0,
+    "returned" : true
+  } ],
+  "productions" : 3
+}, {
+  "id" : "M74",
+  "name" : "Gustaf",
+  "level" : {
+    "type" : "Golden",
+    "procentReduction" : 0.7,
+    "fee" : 3000.0
+  },
+  "rentalHistory" : [ {
+    "animal" : {
+      "animalType" : "CAT",
+      "id" : "A63",
+      "name" : "Bilbo",
+      "color" : "Svart",
+      "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
+      "imageFileLocation" : null,
+      "animalType" : "CAT",
+      "available" : true,
+      "price" : 2000.0,
+      "exotic" : false
+    },
+    "dateFrom" : "2025-12-17",
+    "dateTo" : "2025-12-20",
+    "price" : 4200.0,
+    "returned" : true
+  }, {
+    "animal" : {
+      "animalType" : "CAT",
+      "id" : "A63",
+      "name" : "Bilbo",
+      "color" : "Svart",
+      "description" : "Svart som natten, lugn som ingen annan. Placera Bilbo vart som helst och han kommer sitta där tills det är matdags.",
+      "imageFileLocation" : null,
+      "animalType" : "CAT",
+      "available" : true,
+      "price" : 2000.0,
+      "exotic" : false
+    },
+    "dateFrom" : "2025-12-17",
+    "dateTo" : "2025-12-20",
+    "price" : 4200.0,
+    "returned" : true
+  } ],
+  "productions" : 4
 } ]
